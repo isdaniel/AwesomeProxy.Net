@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RealProxySample", "RealProxySample\RealProxySample.csproj", "{25709F1A-15E2-425E-B01F-EE4D55466155}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AOPLib", "AOPLib\AOPLib.csproj", "{4B0BC731-5920-4EFE-9C80-D567E8DA3758}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AOPLib.Test", "AOPLib.Test\AOPLib.Test.csproj", "{8EDF4429-251A-416D-BB68-93F227191BCF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{25709F1A-15E2-425E-B01F-EE4D55466155}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{25709F1A-15E2-425E-B01F-EE4D55466155}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{25709F1A-15E2-425E-B01F-EE4D55466155}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{25709F1A-15E2-425E-B01F-EE4D55466155}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4B0BC731-5920-4EFE-9C80-D567E8DA3758}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4B0BC731-5920-4EFE-9C80-D567E8DA3758}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4B0BC731-5920-4EFE-9C80-D567E8DA3758}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4B0BC731-5920-4EFE-9C80-D567E8DA3758}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8EDF4429-251A-416D-BB68-93F227191BCF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8EDF4429-251A-416D-BB68-93F227191BCF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8EDF4429-251A-416D-BB68-93F227191BCF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8EDF4429-251A-416D-BB68-93F227191BCF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FFECF21B-B9C5-4B61-8D9F-9A02CAD4A2C7}
+	EndGlobalSection
+EndGlobal
