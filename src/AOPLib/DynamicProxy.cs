@@ -12,10 +12,14 @@ using System.Threading.Tasks;
 
 namespace AOPLib
 {
-    public class DynamicProxy<T> : RealProxy
+    internal class DynamicProxy<T> : RealProxy
         where T : MarshalByRefObject
     {
         private T _target;
+
+        private IMethodCallMessage callMethod = null;
+
+        private IMethodReturnMessage returnMethod = null;
 
         public DynamicProxy(T target) : base(typeof(T))
         {
@@ -29,48 +33,111 @@ namespace AOPLib
         /// <returns></returns>
         public override IMessage Invoke(IMessage msg)
         {
-            IMethodCallMessage callMethod = msg as IMethodCallMessage;
+            callMethod = msg as IMethodCallMessage;
             MethodInfo targetMethod = callMethod.MethodBase as MethodInfo;
-            IMethodReturnMessage returnMethod = null;
 
-            var Attrs = new FilterInfo(_target, targetMethod);
+            FilterInfo Attrs = new FilterInfo(_target, targetMethod);
 
             try
             {
-                //封裝執行前上下文
-                ExcuteingContext excuteContext = new ExcuteingContext(callMethod);
-                Excuting(Attrs.ExcuteFilters, excuteContext);
-                var result = targetMethod.Invoke(_target, excuteContext.InArgs);
-                returnMethod = new ReturnMessage(result,
-                                      excuteContext.InArgs,
-                                      excuteContext.InArgs.Length,
-                                      callMethod.LogicalCallContext,
-                                      callMethod);
-                //封裝執行後上下文
-                ExcutedContext excutingContext = new ExcutedContext(callMethod, returnMethod);
-                Excuted(Attrs.ExcuteFilters, excutingContext);
+                ExcuteingContext excuting = Excuting(Attrs.ExcuteFilters);
+                if (excuting.Result != null)
+                {
+                    returnMethod = GetReturnMessage(excuting.Result,excuting.Args);
+                }
+                else
+                {
+                    InvokeMethod(targetMethod, excuting);
+                    //封裝執行後上下文
+
+                    ExcutedContext excuted = Excuted(Attrs.ExcuteFilters);
+                    if (excuted.Result != null)
+                    {
+                        returnMethod = GetReturnMessage(excuted.Result, excuted.Args);
+                    }
+                }
             }
             catch (Exception ex)
             {
-                returnMethod = new ReturnMessage(ex, callMethod);
+                ExceptionContext exception = OnException(Attrs.ExceptionFilters, ex);
+                //是否要自行處理錯誤
+                if (exception.Result != null)
+                {
+                    returnMethod = GetReturnMessage(exception.Result, exception.Args);
+                }
+                else
+                {
+                    returnMethod = new ReturnMessage(ex, callMethod);
+                }
             }
             return returnMethod;
         }
 
-        private void Excuted(IList<IExcuteFilter> filters, ExcutedContext excuteContext)
+        private void InvokeMethod(MethodInfo targetMethod, ExcuteingContext excuting)
         {
-            foreach (var item in filters)
-            {
-                item.MethodExcuted(excuteContext);
-            }
+            object result = targetMethod.Invoke(_target, excuting.Args);
+            returnMethod = GetReturnMessage(result, excuting.Args);
         }
 
-        private void Excuting(IList<IExcuteFilter> filters, ExcuteingContext excuteContext)
+        /// <summary>
+        /// 執行Exception過濾器
+        /// </summary>
+        /// <param name="exceptionFilter"></param>
+        /// <param name="ex"></param>
+        /// <returns></returns>
+        private ExceptionContext OnException(IList<IExceptionFilter> exceptionFilter, Exception ex)
         {
-            foreach (var item in filters)
+            ExceptionContext excptionContext = new ExceptionContext(callMethod)
             {
-                item.MethodExcuting(excuteContext);
+                Exception = ex
+            };
+
+            foreach (var exFiter in exceptionFilter)
+            {
+                exFiter.OnException(excptionContext);
+                if (excptionContext.Result != null)
+                    break;
             }
+
+            return excptionContext;
+        }
+
+        private ExcutedContext Excuted(IList<IExcuteFilter> filters)
+        {
+            ExcutedContext excutedContext = new ExcutedContext(returnMethod);
+
+            foreach (var filter in filters)
+            {
+                filter.OnExcuted(excutedContext);
+                if (excutedContext.Result != null)
+                    break;
+            }
+
+            return excutedContext;
+        }
+
+        private ExcuteingContext Excuting(IList<IExcuteFilter> filters)
+        { 
+            //封裝執行前上下文
+            ExcuteingContext excuteContext = new ExcuteingContext(callMethod);
+
+            foreach (var filter in filters)
+            {
+                filter.OnExcuting(excuteContext);
+                if (excuteContext.Result != null)
+                    break;
+            }
+
+            return excuteContext;
+        }
+
+        private ReturnMessage GetReturnMessage(object result,object[] args)
+        {
+            return new ReturnMessage(result,
+                                     args,
+                                     args.Length,
+                                     callMethod.LogicalCallContext,
+                                     callMethod);
         }
     }
 }

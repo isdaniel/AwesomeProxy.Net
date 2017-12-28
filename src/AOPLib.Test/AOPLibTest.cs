@@ -4,24 +4,33 @@ using AOPLib.FilterAttribute;
 using AOPLib.Core;
 using System.Runtime.Remoting.Messaging;
 using System.Collections.Generic;
-
+using System;
 
 namespace AOPLib.Test
 {
-    public class Test1Attribute : AopBaseAttribute
-    {
-        public override void MethodExcuted(ExcutedContext result)
-        {
+    
 
-        }
-        public override void MethodExcuting(ExcuteingContext input)
+    public class ExcptionClass : MarshalByRefObject
+    {
+        [Exception]
+        public string GetException(string errorMsg)
         {
-            List<object> oList = new List<object>();
-            foreach (string s in input.InArgs)
-            {
-                oList.Add(s.Replace("!", "").Replace("#", ""));
-            }
-            input.InArgs = oList.ToArray();
+            throw new Exception(errorMsg);
+        }
+    }
+
+    public class RefArgClass : MarshalByRefObject
+    {
+        [Ref]
+        public void ExcuteRef(ref string name)
+        {
+            name = $"Hello {name}";
+        }
+
+        [Out]
+        public void ExcuteOut(out string name)
+        {
+            name = $"Hello ";
         }
     }
 
@@ -44,7 +53,7 @@ namespace AOPLib.Test
 
             IMethodCallMessage MethodCallobject = moqCallMessage.Object;
             IMethodReturnMessage ReturngOjbect = moqReturnMessage.Object;
-            _excutedContext = new ExcutedContext(MethodCallobject, ReturngOjbect);
+            _excutedContext = new ExcutedContext(ReturngOjbect);
             _excutingContext = new ExcuteingContext(MethodCallobject);
         }
 
@@ -52,10 +61,10 @@ namespace AOPLib.Test
         public void MethodExcuting_Test()
         {
             Test1Attribute t = new Test1Attribute();
-            t.MethodExcuting(_excutingContext);
+            t.OnExcuting(_excutingContext);
 
             var except = new object[] { "12345,,11dasd" };
-            var result = _excutingContext.InArgs;
+            var result = _excutingContext.Args;
 
             Assert.AreEqual(except, result);
         }
@@ -64,12 +73,36 @@ namespace AOPLib.Test
         public void MethodExcuted_MethoName_True()
         {
             Test1Attribute t = new Test1Attribute();
-            t.MethodExcuted(_excutedContext);
+            t.OnExcuted(_excutedContext);
 
             var except = "Test_ExcutedContext";
             var result = _excutedContext.MethodName;
 
             Assert.AreEqual(except, result);
+        }
+
+        [Test]
+        public void Method_Exception_ErrorString()
+        {
+            string result = ProxyFactory.GetProxyInstance(new ExcptionClass()).GetException("錯誤!!");
+
+            Assert.AreEqual(result, "錯誤!!");
+        }
+
+        [Test]
+        public void Method_RefArg_and_OutArg_String()
+        {
+            string arg = "daniel";
+            string exceptRef = "Hello danielHello";
+            string exceptOut = "Hello Hello";
+
+            string outString;
+
+            ProxyFactory.GetProxyInstance(new RefArgClass()).ExcuteRef(ref arg);
+            Assert.AreEqual(exceptRef, arg);
+
+            ProxyFactory.GetProxyInstance(new RefArgClass()).ExcuteOut(out outString);
+            Assert.AreEqual(exceptOut, outString);
         }
     }
 }

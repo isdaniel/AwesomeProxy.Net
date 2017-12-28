@@ -7,15 +7,21 @@ using System.Threading.Tasks;
 
 namespace AOPLib.Interface
 {
+    /// <summary>
+    /// 執行過程過濾器
+    /// </summary>
     public interface IExcuteFilter
     {
-        void MethodExcuted(ExcutedContext result);
+        void OnExcuted(ExcutedContext excuteContext);
 
-        void MethodExcuting(ExcuteingContext args);
+        void OnExcuting(ExcuteingContext excutingContext);
     }
 
+    /// <summary>
+    /// 錯誤過濾器
+    /// </summary>
     public interface IExceptionFilter
     {
-        void MethodException(Exception ex);
+        void OnException(ExceptionContext exceptionContext);
     }
 }

@@ -8,13 +8,17 @@ using AOPLib.Core;
 
 namespace AOPLib.FilterAttribute
 {
-    public abstract class AopBaseAttribute : Attribute, IExcuteFilter
+    public abstract class AopBaseAttribute : Attribute, IExcuteFilter,IExceptionFilter
     {
-        public virtual void MethodExcuted(ExcutedContext result)
+        public virtual void OnExcuted(ExcutedContext result)
         {
         }
 
-        public virtual void MethodExcuting(ExcuteingContext args)
+        public virtual void OnExcuting(ExcuteingContext args)
+        {
+        }
+
+        public virtual void OnException(ExceptionContext exceptionContext)
         {
         }
     }

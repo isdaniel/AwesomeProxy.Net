@@ -16,7 +16,9 @@ namespace AOPLib
 
         public FilterInfo(MarshalByRefObject target, MethodInfo method)
         {
+            //search for class Attribute
             var classAttr = target.GetType().GetCustomAttributes(typeof(Attribute), true);
+            //search for method Attribute
             var methodAttr = Attribute.GetCustomAttributes(method, typeof(Attribute), true);
             var unionAttr = classAttr.Union(methodAttr);
             _excuteFilters.AddRange(unionAttr.OfType<IExcuteFilter>());

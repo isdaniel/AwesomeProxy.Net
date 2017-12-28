@@ -32,14 +32,14 @@ namespace RealProxySample.Service
 
     public class ConsoleLogAttribute : AopBaseAttribute
     {
-        public override void MethodExcuted(ExcutedContext result)
+        public override void OnExcuted(ExcutedContext result)
         {
-            Console.WriteLine($"結果:{JsonConvert.SerializeObject(result.Result.ReturnValue)}");
+            Console.WriteLine(JsonConvert.SerializeObject(result.Args));
         }
 
-        public override void MethodExcuting(ExcuteingContext args)
+        public override void OnExcuting(ExcuteingContext args)
         {
-            Console.WriteLine($"傳入參數:{JsonConvert.SerializeObject(args.InArgs)}");
+            Console.WriteLine($"傳入參數:{JsonConvert.SerializeObject(args.Args)}");
         }
     }
 }
