@@ -12,7 +12,7 @@ namespace AOPLib.Test
     {
         public override void OnExcuted(ExcutedContext result)
         {
-
+           
         }
         public override void OnExcuting(ExcuteingContext input)
         {
@@ -30,6 +30,16 @@ namespace AOPLib.Test
         public override void OnException(ExceptionContext exceptionContext)
         {
             exceptionContext.Result = exceptionContext.Exception.InnerException.Message;
+        }
+    }
+
+
+    public class DefaultExceptionAttribute :AopBaseAttribute
+    {
+        public string DefaultErrorMsg { get; set; }
+        public override void OnException(ExceptionContext exceptionContext)
+        {
+            exceptionContext.Result = DefaultErrorMsg;
         }
     }
 

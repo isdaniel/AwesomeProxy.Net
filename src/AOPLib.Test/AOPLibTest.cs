@@ -17,6 +17,16 @@ namespace AOPLib.Test
         {
             throw new Exception(errorMsg);
         }
+        [DefaultException(DefaultErrorMsg ="DefaultException")]
+        public string ThrowDefaultExcption()
+        {
+            throw new Exception();
+        }
+
+        public void NormalExcption(string msg)
+        {
+            throw new Exception(msg);
+        }
     }
 
     public class RefArgClass : MarshalByRefObject
@@ -70,15 +80,15 @@ namespace AOPLib.Test
         }
 
         [Test]
-        public void MethodExcuted_MethoName_True()
+        public void MethodExcuted_MethoNameNull_True()
         {
             Test1Attribute t = new Test1Attribute();
             t.OnExcuted(_excutedContext);
 
-            var except = "Test_ExcutedContext";
+    
             var result = _excutedContext.MethodName;
 
-            Assert.AreEqual(except, result);
+            Assert.AreEqual(null, result);
         }
 
         [Test]
@@ -104,5 +114,40 @@ namespace AOPLib.Test
             ProxyFactory.GetProxyInstance(new RefArgClass()).ExcuteOut(out outString);
             Assert.AreEqual(exceptOut, outString);
         }
+
+        [Test]
+        public void Method_DefaultException_ThrowDefaultExcption()
+        {
+            string except = "DefaultException";
+            string result = ProxyFactory.GetProxyInstance(new ExcptionClass()).ThrowDefaultExcption();
+
+            Assert.AreEqual(except, result);          
+        }
+
+        [Test]
+        public void Method_Exception_ThrowException()
+        {
+            string except = "DefaultException";
+
+            Exception ex = Assert.Throws<Exception>(()=> {
+                new ExcptionClass().NormalExcption(except);
+            });
+
+            Assert.That(ex.Message,Is.EqualTo(except));
+        }
+
+        [Test]
+        public void ProxyMethod_Exception_ThrowException()
+        {
+            string except = "DefaultException";
+
+            System.Reflection.TargetInvocationException ex = Assert.Throws<System.Reflection.TargetInvocationException>(() => {
+                ProxyFactory.GetProxyInstance(new ExcptionClass())
+                .NormalExcption(except);
+            });
+
+            Assert.That(ex.InnerException.Message, Is.EqualTo(except));
+        }
+
     }
 }
