@@ -3,8 +3,6 @@ using AOPLib.FilterAttribute;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AOPLib.Test
 {
@@ -12,8 +10,8 @@ namespace AOPLib.Test
     {
         public override void OnExcuted(ExcutedContext result)
         {
-           
         }
+
         public override void OnExcuting(ExcuteingContext input)
         {
             List<object> oList = new List<object>();
@@ -33,10 +31,10 @@ namespace AOPLib.Test
         }
     }
 
-
-    public class DefaultExceptionAttribute :AopBaseAttribute
+    public class DefaultExceptionAttribute : AopBaseAttribute
     {
         public string DefaultErrorMsg { get; set; }
+
         public override void OnException(ExceptionContext exceptionContext)
         {
             exceptionContext.Result = DefaultErrorMsg;
@@ -45,19 +43,17 @@ namespace AOPLib.Test
 
     public class RefAttribute : AopBaseAttribute
     {
-
         public override void OnExcuting(ExcuteingContext args)
         {
             if (args.Args.FirstOrDefault() != null)
             {
-                args.Args[0] = args.Args[0].ToString()+"Hello";
+                args.Args[0] = args.Args[0].ToString() + "Hello";
             }
         }
     }
 
     public class OutAttribute : AopBaseAttribute
     {
-
         public override void OnExcuting(ExcuteingContext args)
         {
             if (args.Args.FirstOrDefault() != null)

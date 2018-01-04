@@ -16,9 +16,12 @@ namespace RealProxySample
     {
         private static void Main(string[] args)
         {
+            //1.使用 ProxyFactory.GetProxyInstance 取得代理物件
             var t = ProxyFactory.GetProxyInstance<ServiceBase>(typeof(IntService));
+            //2.執行方法
             var result = t.add(1, 2);
             t.SetPerson(new Model.Person() { Age = 10 });
+
             Console.WriteLine(result);
             Console.ReadKey();
         }
