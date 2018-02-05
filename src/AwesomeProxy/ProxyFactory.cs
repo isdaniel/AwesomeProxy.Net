@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AOPLib.Core
+namespace AwesomeProxy
 {
     public class ProxyFactory
     {
@@ -52,6 +52,5 @@ namespace AOPLib.Core
             var _proxy = new DynamicProxy<TOjbect>(realSubjcet);
             return _proxy.GetTransparentProxy() as TOjbect;
         }
-
     }
 }

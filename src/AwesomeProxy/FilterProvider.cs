@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RealProxySample.Service
+namespace AwesomeProxy
 {
-    public interface IService<T>
+    public class FilterProvider
     {
-        T add(T t1, T t2);
     }
 }

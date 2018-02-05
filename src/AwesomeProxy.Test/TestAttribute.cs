@@ -1,10 +1,9 @@
-﻿using AOPLib.Core;
-using AOPLib.FilterAttribute;
+﻿using AwesomeProxy.FilterAttribute;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace AOPLib.Test
+namespace AwesomeProxy.Test
 {
     public class Test1Attribute : AopBaseAttribute
     {

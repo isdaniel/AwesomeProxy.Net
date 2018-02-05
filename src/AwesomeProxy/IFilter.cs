@@ -1,11 +1,4 @@
-﻿using AOPLib.Core;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AOPLib.Interface
+﻿namespace AwesomeProxy
 {
     /// <summary>
     /// 執行過程過濾器

@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.Remoting.Messaging;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace AOPLib.Core
+namespace AwesomeProxy
 {
     /// <summary>
     /// 執行前上下文
@@ -21,7 +17,7 @@ namespace AOPLib.Core
         public object[] Args { get; set; }
 
         public string MethodName { get; set; }
-        
+
         /// <summary>
         /// 返回結果
         /// </summary>
@@ -40,10 +36,11 @@ namespace AOPLib.Core
         }
 
         public object[] Args { get; set; }
+
         public string MethodName { get; set; }
 
         /// <summary>
-        /// 返回結果
+        /// 返回結果(如果非Null)
         /// </summary>
         public object Result { get; set; }
     }
@@ -65,6 +62,9 @@ namespace AOPLib.Core
         /// </summary>
         public object Result { get; set; }
 
+        /// <summary>
+        /// 錯誤訊息
+        /// </summary>
         public Exception Exception { get; set; }
     }
 

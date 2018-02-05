@@ -1,14 +1,10 @@
-﻿using AOPLib.FilterAttribute;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AOPLib.Core;
+﻿using System;
 using Newtonsoft.Json;
-using RealProxySample.Model;
+using AwesomeProxySample.Model;
+using AwesomeProxy.FilterAttribute;
+using AwesomeProxy;
 
-namespace RealProxySample.Service
+namespace AwesomeProxySample.Service
 {
     public class IntService : ServiceBase
     {
@@ -30,6 +26,9 @@ namespace RealProxySample.Service
         }
     }
 
+    /// <summary>
+    /// AopBaseAttribute
+    /// </summary>
     public class ConsoleLogAttribute : AopBaseAttribute
     {
         public override void OnExcuted(ExcutedContext result)

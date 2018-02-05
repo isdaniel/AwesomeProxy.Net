@@ -1,14 +1,15 @@
-﻿using AOPLib.FilterAttribute;
-using AOPLib.Interface;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace AOPLib
+namespace AwesomeProxy
 {
+    /// <summary>
+    /// 攔截當前註冊的過濾點
+    /// 1.類別上
+    /// 2.方法上
+    /// </summary>
     public class FilterInfo
     {
         private List<IExcuteFilter> _excuteFilters = new List<IExcuteFilter>();
@@ -20,7 +21,9 @@ namespace AOPLib
             var classAttr = target.GetType().GetCustomAttributes(typeof(Attribute), true);
             //search for method Attribute
             var methodAttr = Attribute.GetCustomAttributes(method, typeof(Attribute), true);
+
             var unionAttr = classAttr.Union(methodAttr);
+
             _excuteFilters.AddRange(unionAttr.OfType<IExcuteFilter>());
             _exceptionFilters.AddRange(unionAttr.OfType<IExceptionFilter>());
         }

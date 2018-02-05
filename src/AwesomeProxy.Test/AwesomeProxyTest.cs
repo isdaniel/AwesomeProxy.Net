@@ -1,15 +1,12 @@
 ﻿using NUnit.Framework;
 using Moq;
-using AOPLib.FilterAttribute;
-using AOPLib.Core;
+using AwesomeProxy.FilterAttribute;
 using System.Runtime.Remoting.Messaging;
 using System.Collections.Generic;
 using System;
 
-namespace AOPLib.Test
+namespace AwesomeProxy.Test
 {
-    
-
     public class ExcptionClass : MarshalByRefObject
     {
         [Exception]
@@ -17,7 +14,8 @@ namespace AOPLib.Test
         {
             throw new Exception(errorMsg);
         }
-        [DefaultException(DefaultErrorMsg ="DefaultException")]
+
+        [DefaultException(DefaultErrorMsg = "DefaultException")]
         public string ThrowDefaultExcption()
         {
             throw new Exception();
@@ -85,7 +83,6 @@ namespace AOPLib.Test
             Test1Attribute t = new Test1Attribute();
             t.OnExcuted(_excutedContext);
 
-    
             var result = _excutedContext.MethodName;
 
             Assert.AreEqual(null, result);
@@ -121,7 +118,7 @@ namespace AOPLib.Test
             string except = "DefaultException";
             string result = ProxyFactory.GetProxyInstance(new ExcptionClass()).ThrowDefaultExcption();
 
-            Assert.AreEqual(except, result);          
+            Assert.AreEqual(except, result);
         }
 
         [Test]
@@ -129,11 +126,12 @@ namespace AOPLib.Test
         {
             string except = "DefaultException";
 
-            Exception ex = Assert.Throws<Exception>(()=> {
+            Exception ex = Assert.Throws<Exception>(() =>
+            {
                 new ExcptionClass().NormalExcption(except);
             });
 
-            Assert.That(ex.Message,Is.EqualTo(except));
+            Assert.That(ex.Message, Is.EqualTo(except));
         }
 
         [Test]
@@ -141,13 +139,13 @@ namespace AOPLib.Test
         {
             string except = "DefaultException";
 
-            System.Reflection.TargetInvocationException ex = Assert.Throws<System.Reflection.TargetInvocationException>(() => {
+            System.Reflection.TargetInvocationException ex = Assert.Throws<System.Reflection.TargetInvocationException>(() =>
+            {
                 ProxyFactory.GetProxyInstance(new ExcptionClass())
                 .NormalExcption(except);
             });
 
             Assert.That(ex.InnerException.Message, Is.EqualTo(except));
         }
-
     }
 }

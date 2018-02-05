@@ -1,16 +1,10 @@
-﻿using AOPLib.Core;
-using AOPLib.FilterAttribute;
-using AOPLib.Interface;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using System.Runtime.Remoting.Messaging;
 using System.Runtime.Remoting.Proxies;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace AOPLib
+namespace AwesomeProxy
 {
     internal class DynamicProxy<T> : RealProxy
         where T : MarshalByRefObject
@@ -43,7 +37,7 @@ namespace AOPLib
                 ExcuteingContext excuting = Excuting(Attrs.ExcuteFilters);
                 if (excuting.Result != null)
                 {
-                    returnMethod = GetReturnMessage(excuting.Result,excuting.Args);
+                    returnMethod = GetReturnMessage(excuting.Result, excuting.Args);
                 }
                 else
                 {
@@ -117,7 +111,7 @@ namespace AOPLib
         }
 
         private ExcuteingContext Excuting(IList<IExcuteFilter> filters)
-        { 
+        {
             //封裝執行前上下文
             ExcuteingContext excuteContext = new ExcuteingContext(callMethod);
 
@@ -131,7 +125,7 @@ namespace AOPLib
             return excuteContext;
         }
 
-        private ReturnMessage GetReturnMessage(object result,object[] args)
+        private ReturnMessage GetReturnMessage(object result, object[] args)
         {
             return new ReturnMessage(result,
                                      args,

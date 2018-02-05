@@ -4,31 +4,27 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NUnit.Framework;
-using AOPLib.Core;
 
-namespace AOPLib.Test
+namespace AwesomeProxy.Test
 {
     public abstract class InheritMarshalByRefObject : MarshalByRefObject
     {
-
     }
 
     public class InheritSubClass : InheritMarshalByRefObject
     {
-
     }
 
     public class NoInheritMarshalByRefObject
     {
-
     }
 
     [TestFixture]
     public class ProxyFactoryTest
     {
-
         [Test]
-        public void NoArgs_InheritMarshalByRefObject_True() {
+        public void NoArgs_InheritMarshalByRefObject_True()
+        {
             var DFactory = ProxyFactory.GetProxyInstance(new InheritSubClass());
         }
 
@@ -43,12 +39,12 @@ namespace AOPLib.Test
         {
             var Except = "傳入 subjectType 需繼承於InheritMarshalByRefObject";
 
-            var Result = Assert.Throws<ArgumentException>(() => {
+            var Result = Assert.Throws<ArgumentException>(() =>
+            {
                 ProxyFactory.GetProxyInstance<InheritMarshalByRefObject>(typeof(NoInheritMarshalByRefObject));
             });
 
             Assert.AreEqual(Result.Message, Except);
         }
-
     }
 }
