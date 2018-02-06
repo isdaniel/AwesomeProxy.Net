@@ -27,7 +27,7 @@ namespace AwesomeProxySample.Service
     }
 
     /// <summary>
-    /// AopBaseAttribute
+    /// 紀錄Log標籤
     /// </summary>
     public class ConsoleLogAttribute : AopBaseAttribute
     {

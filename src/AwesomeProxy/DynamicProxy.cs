@@ -45,10 +45,6 @@ namespace AwesomeProxy
                     //封裝執行後上下文
 
                     ExcutedContext excuted = Excuted(Attrs.ExcuteFilters);
-                    if (excuted.Result != null)
-                    {
-                        returnMethod = GetReturnMessage(excuted.Result, excuted.Args);
-                    }
                 }
             }
             catch (Exception ex)

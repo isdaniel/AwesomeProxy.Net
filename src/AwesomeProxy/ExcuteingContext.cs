@@ -33,6 +33,7 @@ namespace AwesomeProxy
         {
             Args = returnMethod.Args;
             MethodName = returnMethod.MethodName;
+            Result = returnMethod.ReturnValue;
         }
 
         public object[] Args { get; set; }
