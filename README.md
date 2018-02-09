@@ -1,77 +1,106 @@
-## Aop是甚麼可以吃嗎? (Aspect-Oriented Programming)
-#### Aop使用設計模式中Proxy pattern核心思想
-#### 主要意圖將日誌記錄，性能統計，安全控制，事務處理，異常處理等代碼從業務邏輯代碼中劃分出來。
-#### Asp.Net MVC中Filter就是使用AOP概念來實作
+今天和大家分享[AwesomeProxy.Net](https://github.com/isdaniel/AwesomeProxy.Net)小弟開源AOP輕型框架
 
-<br/>
 
-![image error](/file/img/introductionImg.png)
-### 如上圖 我們可以看到代理模式將 核心執行程式,寫日誌分離出來已便日後擴展
-<br/>
+## 簡單介紹 **AOP** (Aspect-Oriented Programming)
 
-### AOPLib 使用簡單，使用起來跟Asp.net MVC Filter類似
----
+AOP 是 **OOP(物件導向)一個變化程式撰寫思想。**（非取代OOP而是擴充）
 
-## 撰寫攔截器標籤
-### 繼承`AopBaseAttribute` 重寫要執行的方法
-1. `OnExcuted`   執行後動作
-2. `OnExcutint`  執行前動作
-3. `OnException` 錯誤時動作
+導入AOP幫助：
+    可幫我們分離**核心邏輯**跟**非核心邏輯**代碼，很好降低模組間耦合性，已便日後擴充。
 
+　　非核心邏輯代碼像：(日誌記錄，性能統計，安全控制，事務處理，異常處理等代碼從業務邏輯代碼中劃分出來)
+
+例如下圖：
+
+![https://ithelp.ithome.com.tw/upload/images/20180209/20096630UyP6I4l2MB.png](https://ithelp.ithome.com.tw/upload/images/20180209/20096630UyP6I4l2MB.png)
+
+　　原本寫法把寫日誌相關程式寫入，業務邏輯方法中。導致此方法非單一職則。我們可以把程式重構改寫成(右圖)，將寫日誌方法抽離出來更有效達成模組化。
+  
+**經典例子:**
+
+    Asp.Net MVC中Contoller，Action過濾器(FilterAttribute)
+
+
+-----
+
+
+## AwesomeProxy.Net介紹：
+
+AwesomeProxy.Net 主要是攔截方法處理
+1.	方法執行前
+2.	方法執行後
+3.	方法異常
+
+
+### How to Use:
+   使用方法類似於Asp.Net MVC中Contoller，Action過濾器
+
+1.	撰寫一個標籤(Attribute) 標記攔截動作
 ```c#
-public class ConsoleLogAttribute : AopBaseAttribute
+public class CacheAttribute : AopBaseAttribute
 {
-    public override void OnExcuted(ExcutedContext result)
+    public string CacheName { get; set; }
+
+    public override void OnExcuting(ExcuteingContext context)
     {
-        Console.WriteLine(JsonConvert.SerializeObject(result.Args));
+        object cacheObj = CallContext.GetData(CacheName);
+        if (cacheObj != null)
+        {
+            context.Result = cacheObj;
+        }
     }
 
-    public override void OnExcuting(ExcuteingContext args)
+    public override void OnExcuted(ExcutedContext context)
     {
-        Console.WriteLine($"傳入參數:{JsonConvert.SerializeObject(args.Args)}");
+        CallContext.SetData(CacheName, context.Result);
     }
 }
 ```
 
-## 標註要攔截
-### 1.標註在要攔截的類別或方法上
-### 2.使用類別繼承`MarshalByRefObject`
 
-```c#
-[ConsoleLog]
-public abstract class ServiceBase : MarshalByRefObject, IService<int>
+2. 將要被攔截類別繼承於**MarshalByRefObject**類別
+
+```C#
+public class CacheService : MarshalByRefObject
 {
-    public int add(int t1, int t2)
-    {
-        return t1 + t2;
-    }
-
-    public Person SetPerson(Person p)
-    {
-        p.Age = 100;
-        p.Name = "test";
-        return p;
-    }
+    [Cache]
+	public string GetCacheDate()
+	{
+		return DateTime.Now.ToString("yyyy/MM/dd hh:mm:ss");
+	}
 }
 ```
 
-## 使用
-### 1.使用ProxyFactory.GetProxyInstance 動態產生代理類別(此類別需繼承 `MarshalByRefObject`)
-### 2.呼叫使用方法
-```c#
-private static void Main(string[] args)
-{
-    //1.使用 ProxyFactory.GetProxyInstance 取得代理物件
-    var t = ProxyFactory.GetProxyInstance<ServiceBase>(typeof(IntService));
-    //2.執行方法
-    var result = t.add(1, 2);
-    t.SetPerson(new Model.Person() { Age = 10 });
-
-    Console.WriteLine(result);
-    Console.ReadKey();
-}
+3. 由ProxyFactory.GetProxyInstance 動態產生被代理類別
+``` c#
+CacheService cache = ProxyFactory.GetProxyInstance<CacheService>();
 ```
-<br/>
 
-## 執行結果如下
-![image error](/file/img/result.png "Optional title")
+
+4.直接呼叫方法就可執行標籤上的攔截動作
+```C#
+CacheService cache = ProxyFactory.GetProxyInstance<CacheService>();
+Console.WriteLine(cache.GetCacheDate());
+```
+
+
+Simple Code：
+
+  **撰寫Log**
+  **權限驗證**
+  **快取**
+
+
+![https://ithelp.ithome.com.tw/upload/images/20180209/20096630BB4lN2NYOW.png](https://ithelp.ithome.com.tw/upload/images/20180209/20096630BB4lN2NYOW.png)
+
+**Unit Test 結果**
+
+![https://ithelp.ithome.com.tw/upload/images/20180209/20096630tbgj7MbcAL.png](https://ithelp.ithome.com.tw/upload/images/20180209/20096630tbgj7MbcAL.png)
+
+
+## 小結：
+
+使用 [AwesomeProxy.Net ](https://github.com/isdaniel/AwesomeProxy.Net)和ASP.Net MVC註冊Contoller或Action過濾器一樣
+AOP核心思想就是代理模式。
+
+本篇只先介紹如何使用，後續有時間會再補充代理模式細節！
