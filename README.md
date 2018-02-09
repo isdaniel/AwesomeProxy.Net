@@ -1,6 +1,3 @@
-今天和大家分享[AwesomeProxy.Net](https://github.com/isdaniel/AwesomeProxy.Net)小弟開源AOP輕型框架
-
-
 ## 簡單介紹 **AOP** (Aspect-Oriented Programming)
 
 AOP 是 **OOP(物件導向)一個變化程式撰寫思想。**（非取代OOP而是擴充）
@@ -18,7 +15,7 @@ AOP 是 **OOP(物件導向)一個變化程式撰寫思想。**（非取代OOP而
   
 **經典例子:**
 
-    Asp.Net MVC中Contoller，Action過濾器(FilterAttribute)
+Asp.Net MVC中Contoller，Action過濾器(FilterAttribute)
 
 
 -----
@@ -98,9 +95,4 @@ Simple Code：
 ![https://ithelp.ithome.com.tw/upload/images/20180209/20096630tbgj7MbcAL.png](https://ithelp.ithome.com.tw/upload/images/20180209/20096630tbgj7MbcAL.png)
 
 
-## 小結：
 
-使用 [AwesomeProxy.Net ](https://github.com/isdaniel/AwesomeProxy.Net)和ASP.Net MVC註冊Contoller或Action過濾器一樣
-AOP核心思想就是代理模式。
-
-本篇只先介紹如何使用，後續有時間會再補充代理模式細節！
