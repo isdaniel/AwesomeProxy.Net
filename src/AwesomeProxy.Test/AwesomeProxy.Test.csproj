@@ -8,8 +8,8 @@
     <ProjectGuid>{8EDF4429-251A-416D-BB68-93F227191BCF}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>AOPLib.Test</RootNamespace>
-    <AssemblyName>AOPLib.Test</AssemblyName>
+    <RootNamespace>AwesomeProxy.Test</RootNamespace>
+    <AssemblyName>AwesomeProxy.Test</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <NuGetPackageImportStamp>

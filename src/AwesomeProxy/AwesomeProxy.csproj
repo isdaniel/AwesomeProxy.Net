@@ -7,8 +7,8 @@
     <ProjectGuid>{4B0BC731-5920-4EFE-9C80-D567E8DA3758}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>AOPLib</RootNamespace>
-    <AssemblyName>AOPLib</AssemblyName>
+    <RootNamespace>AwesomeProxy</RootNamespace>
+    <AssemblyName>AwesomeProxy</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
