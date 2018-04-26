@@ -6,9 +6,9 @@ using System.Reflection;
 namespace AwesomeProxy
 {
     /// <summary>
-    /// 攔截當前註冊的過濾點
-    /// 1.類別上
-    /// 2.方法上
+    /// Filtering Current Registered Point
+    /// 1.on Class
+    /// 2.on Method
     /// </summary>
     public class FilterInfo
     {

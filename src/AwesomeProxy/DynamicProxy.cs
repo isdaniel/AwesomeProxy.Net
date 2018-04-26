@@ -6,6 +6,10 @@ using System.Runtime.Remoting.Proxies;
 
 namespace AwesomeProxy
 {
+    /// <summary>
+    /// AOP Proxy Class
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     internal class DynamicProxy<T> : RealProxy
         where T : MarshalByRefObject
     {
@@ -21,7 +25,7 @@ namespace AwesomeProxy
         }
 
         /// <summary>
-        /// 執行方法
+        /// Execute RealSubject Method
         /// </summary>
         /// <param name="msg"></param>
         /// <returns></returns>
@@ -42,15 +46,15 @@ namespace AwesomeProxy
                 else
                 {
                     InvokeMethod(targetMethod, excuting);
-                    //封裝執行後上下文
 
+                    //Execute Executed Filters
                     ExcutedContext excuted = Excuted(Attrs.ExcuteFilters);
                 }
             }
             catch (Exception ex)
             {
                 ExceptionContext exception = OnException(Attrs.ExceptionFilters, ex);
-                //是否要自行處理錯誤
+                //Is There any Customer error Result
                 if (exception.Result != null)
                 {
                     returnMethod = GetReturnMessage(exception.Result, exception.Args);

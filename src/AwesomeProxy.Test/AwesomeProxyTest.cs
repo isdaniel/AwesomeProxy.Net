@@ -45,7 +45,6 @@ namespace AwesomeProxy.Test
     [TestFixture]
     public class AOPTest
     {
-        private Mock<AopBaseAttribute> _moqAttribute = new Mock<AopBaseAttribute>();
         private ExcutedContext _excutedContext;
         private ExcuteingContext _excutingContext;
 
@@ -59,10 +58,8 @@ namespace AwesomeProxy.Test
             moqCallMessage.Setup(o => o.MethodName).Returns("Test_ExcutedContext");
             moqReturnMessage.Setup(o => o.ReturnValue).Returns(It.IsAny<object>);
 
-            IMethodCallMessage MethodCallobject = moqCallMessage.Object;
-            IMethodReturnMessage ReturngOjbect = moqReturnMessage.Object;
-            _excutedContext = new ExcutedContext(ReturngOjbect);
-            _excutingContext = new ExcuteingContext(MethodCallobject);
+            _excutedContext = new ExcutedContext(moqReturnMessage.Object);
+            _excutingContext = new ExcuteingContext(moqCallMessage.Object);
         }
 
         [Test]
@@ -146,6 +143,26 @@ namespace AwesomeProxy.Test
             });
 
             Assert.That(ex.InnerException.Message, Is.EqualTo(except));
+        }
+
+        [Test]
+        public void InputString_GetFirstArg_True()
+        {
+            var except = "12345!!##,,11dasd";
+            var result = _excutingContext.GetFirstArg<string>();
+
+            Assert.AreEqual(except, result);
+        }
+
+
+        [Test]
+        public void InputString_TryGetFristArg_True()
+        {
+            var except = "12345!!##,,11dasd";
+            string result;
+
+            Assert.AreEqual(true, _excutingContext.TryGetFristArg(out result));
+            Assert.AreEqual(except, result);
         }
     }
 }

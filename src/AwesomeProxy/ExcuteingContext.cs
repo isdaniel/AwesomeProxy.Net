@@ -1,12 +1,55 @@
 ﻿using System;
+using System.Linq;
+using System.Collections.Generic;
 using System.Runtime.Remoting.Messaging;
 
 namespace AwesomeProxy
 {
+    public abstract class ContextBase
+    {        
+        /// <summary>
+        /// 返回結果
+        /// </summary>
+        public object Result { get; set; }
+        public object[] Args { get; set; }
+
+        /// <summary>
+        /// 取得第一個參數
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public virtual T GetFirstArg<T>()
+            where T : class
+        {
+            T result = default(T);
+
+            if (IsExistArgs)
+                result = Args.OfType<T>().FirstOrDefault();
+
+            return result;
+        }
+
+        public virtual bool TryGetFristArg<T>(out T arg)
+             where T : class
+        {
+            arg = Args.OfType<T>().FirstOrDefault();
+
+            return arg != default(T);
+        }
+
+        private bool IsExistArgs
+        {
+            get {
+                return Args.Length > 0;
+            }
+        }
+    }
+
+
     /// <summary>
     /// 執行前上下文
     /// </summary>
-    public class ExcuteingContext : IResult
+    public class ExcuteingContext : ContextBase
     {
         public ExcuteingContext(IMethodCallMessage callMessage)
         {
@@ -14,20 +57,13 @@ namespace AwesomeProxy
             MethodName = callMessage.MethodName;
         }
 
-        public object[] Args { get; set; }
-
         public string MethodName { get; set; }
-
-        /// <summary>
-        /// 返回結果
-        /// </summary>
-        public object Result { get; set; }
     }
 
     /// <summary>
     /// 執行後上下文
     /// </summary>
-    public class ExcutedContext : IResult
+    public class ExcutedContext : ContextBase
     {
         public ExcutedContext(IMethodReturnMessage returnMethod)
         {
@@ -35,18 +71,10 @@ namespace AwesomeProxy
             MethodName = returnMethod.MethodName;
             Result = returnMethod.ReturnValue;
         }
-
-        public object[] Args { get; set; }
-
         public string MethodName { get; set; }
-
-        /// <summary>
-        /// 返回結果(如果非Null)
-        /// </summary>
-        public object Result { get; set; }
     }
 
-    public class ExceptionContext : IResult
+    public class ExceptionContext : ContextBase
     {
         public ExceptionContext(IMethodCallMessage callMessage)
         {
@@ -54,30 +82,8 @@ namespace AwesomeProxy
         }
 
         /// <summary>
-        /// 傳入參數
-        /// </summary>
-        public object[] Args { get; set; }
-
-        /// <summary>
-        /// 返回錯誤回傳值
-        /// </summary>
-        public object Result { get; set; }
-
-        /// <summary>
         /// 錯誤訊息
         /// </summary>
         public Exception Exception { get; set; }
-    }
-
-    public interface IResult
-    {
-        object Result { get; set; }
-        object[] Args { get; set; }
-    }
-
-    public class ResultContext : IResult
-    {
-        public object Result { get; set; }
-        public object[] Args { get; set; }
     }
 }

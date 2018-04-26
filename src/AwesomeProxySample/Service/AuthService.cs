@@ -27,9 +27,7 @@ namespace AwesomeProxySample.Service
     {
         public override void OnExcuting(ExcuteingContext context)
         {
-            LoginInfo loginInfo = context.Args
-                .OfType<LoginInfo>()
-                .FirstOrDefault();
+            LoginInfo loginInfo = context.GetFirstArg<LoginInfo>();
 
             if (loginInfo != null)
             {
