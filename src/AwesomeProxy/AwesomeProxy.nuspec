@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>AwesomeProxy.Net</id>
+    <version>1.0.1</version>
+    <title>Daniel</title>
+    <authors>Daniel</authors>
+    <owners>Daniel</owners>
+    <licenseUrl>https://github.com/isdaniel/AwesomeProxy.Net</licenseUrl>
+    <projectUrl>https://github.com/isdaniel/AwesomeProxy.Net</projectUrl>
+    <iconUrl>http://ICON_URL_HERE_OR_DELETE_THIS_LINE</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>This is a AOP framework</description>
+    <releaseNotes>Summary of changes made in this release of the package.</releaseNotes>
+    <copyright>Copyright 2018</copyright>
+    <tags>c# AOP</tags>
+  </metadata>
+</package>
