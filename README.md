@@ -60,7 +60,7 @@ public class CacheAttribute : AopBaseAttribute
 ```C#
 public class CacheService : MarshalByRefObject
 {
-    [Cache]
+        [Cache]
 	public string GetCacheDate()
 	{
 		return DateTime.Now.ToString("yyyy/MM/dd hh:mm:ss");
@@ -95,4 +95,6 @@ Simple Code：
 ![https://ithelp.ithome.com.tw/upload/images/20180209/20096630tbgj7MbcAL.png](https://ithelp.ithome.com.tw/upload/images/20180209/20096630tbgj7MbcAL.png)
 
 
+**2018-11-26 發布至Nuget上**
 
+Nuget：[AwesomeProxy.Net](https://www.nuget.org/packages/AwesomeProxy.Net/)

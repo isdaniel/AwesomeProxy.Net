@@ -46,5 +46,15 @@ namespace AwesomeProxy.Test
 
             Assert.AreEqual(Result.Message, Except);
         }
+
+        [Test]
+        public void ProxyFactory_GetCustomerError()
+        {
+            var Except = "TestError";
+
+            var Result = ProxyFactory.GetProxyInstance<CError>().GetError();
+
+            Assert.AreEqual(Result, Except);
+        }
     }
 }

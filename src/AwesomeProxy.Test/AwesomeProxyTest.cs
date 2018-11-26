@@ -7,6 +7,13 @@ using System;
 
 namespace AwesomeProxy.Test
 {
+    public class CError : MarshalByRefObject {
+        [CustomerError]
+        public string GetError() {
+            throw new Exception("test");
+        }
+    }
+
     public class ExcptionClass : MarshalByRefObject
     {
         [Exception]

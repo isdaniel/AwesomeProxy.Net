@@ -43,6 +43,8 @@ namespace AwesomeProxy
                 return Args.Length > 0;
             }
         }
+
+        public string MethodName { get; set; }
     }
 
 
@@ -56,8 +58,6 @@ namespace AwesomeProxy
             Args = callMessage.Args;
             MethodName = callMessage.MethodName;
         }
-
-        public string MethodName { get; set; }
     }
 
     /// <summary>
@@ -71,7 +71,6 @@ namespace AwesomeProxy
             MethodName = returnMethod.MethodName;
             Result = returnMethod.ReturnValue;
         }
-        public string MethodName { get; set; }
     }
 
     public class ExceptionContext : ContextBase
@@ -79,6 +78,7 @@ namespace AwesomeProxy
         public ExceptionContext(IMethodCallMessage callMessage)
         {
             Args = callMessage.InArgs;
+            MethodName = callMessage.MethodName;
         }
 
         /// <summary>

@@ -22,6 +22,13 @@ namespace AwesomeProxy.Test
         }
     }
 
+    public class CustomerErrorAttribute : AopBaseAttribute{
+        public override void OnException(ExceptionContext exceptionContext)
+        {
+            exceptionContext.Result = "TestError";
+        }
+    }
+
     public class ExceptionAttribute : AopBaseAttribute
     {
         public override void OnException(ExceptionContext exceptionContext)
