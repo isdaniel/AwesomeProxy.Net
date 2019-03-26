@@ -18,14 +18,14 @@ build:
   publish_azure_webjob: true
   verbosity: minimal
 artifacts:
-- path: .\*.nupkg
+- path: '*.nupkg'
   name: NuGet
 deploy:
 - provider: NuGet
   server: https://api.nuget.org/v3/index.json
   api_key:
-    secure: N8XhMwrR9A+0U9zzYYMOWF3xzD1miiu824syuaN1ovk=
+    secure: oZ0W/lO60ivXmzYEYAw0CEd8225s5BVgkTwsubzPKesVTBqsNbC4LwJIeci9QC3r
   skip_symbols: false
-  artifact: .\*.nupkg
+  artifact: '*.nupkg'
   on:
     branch: master
