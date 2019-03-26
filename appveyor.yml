@@ -1,0 +1,13 @@
+version: 1.0.{build}
+platform: Any CPU
+build:
+  project: src/AwesomeProxy.sln
+  verbosity: minimal
+  
+test:
+  # only assemblies to test
+  assemblies:
+    only:
+      - 'src\bin\**\*.tests.dll'
+	  
+ 
