@@ -131,3 +131,8 @@ $RECYCLE.BIN/
 .DS_Store
 
 _NCrunch*
+/src/.vs
+/src/AwesomeProxySample/.vs
+/src/AwesomeProxy/*.exe
+/src/AwesomeProxy/*.nuspec
+/src/.vs

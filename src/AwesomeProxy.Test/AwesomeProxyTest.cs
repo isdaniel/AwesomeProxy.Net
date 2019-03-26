@@ -1,8 +1,6 @@
 ﻿using NUnit.Framework;
 using Moq;
-using AwesomeProxy.FilterAttribute;
 using System.Runtime.Remoting.Messaging;
-using System.Collections.Generic;
 using System;
 
 namespace AwesomeProxy.Test

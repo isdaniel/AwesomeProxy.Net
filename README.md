@@ -1,3 +1,8 @@
+[![AwesomeProxy.Net](https://img.shields.io/badge/nuget-1.0.2-blue.svg)](https://www.nuget.org/packages/AwesomeProxy.Net/)
+[![NuGet Downloads](https://img.shields.io/nuget/dt/AwesomeProxy.Net.svg)](https://www.nuget.org/packages/AwesomeProxy.Net/)
+[![Build status](https://ci.appveyor.com/api/projects/status/4ktwufjfsxmpishy/branch/master?svg=true)](https://ci.appveyor.com/project/isdaniel/electronicinvoice-tw/branch/master)
+-----
+
 ## 簡單介紹 **AOP** (Aspect-Oriented Programming)
 
 AOP 是 **OOP(物件導向)一個變化程式撰寫思想。**（非取代OOP而是擴充）
