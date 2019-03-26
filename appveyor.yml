@@ -1,5 +1,13 @@
 version: '{build}'
+pull_requests:
+  do_not_increment_build_number: true
+branches:
+  only:
+  - master
+skip_tags: true
+configuration: Release
 platform: Any CPU
+shallow_clone: true
 nuget:
   account_feed: true
   project_feed: true
@@ -7,14 +15,17 @@ before_build:
 - cmd: nuget restore src\AwesomeProxy.sln
 build:
   project: src/AwesomeProxy.sln
+  publish_azure_webjob: true
+  verbosity: minimal
 artifacts:
-- path: .\**\*.nupkg
+- path: .\artifacts\**\*.nupkg
   name: NuGet
 deploy:
 - provider: NuGet
   server: https://www.nuget.org/packages/AwesomeProxy.Net/
   api_key:
-    secure: FT9UUgylw6RFOKsRjSKH5M3Uv9H+kyzigWqoR/OQYvH6XU9fIwn7nWYAdZo4cjtX
+    secure: N8XhMwrR9A+0U9zzYYMOWF3xzD1miiu824syuaN1ovk=
   skip_symbols: false
+  artifact: /.*\.nupkg/
   on:
     branch: master
