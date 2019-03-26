@@ -1,4 +1,4 @@
-version: {build}
+version: '{build}'
 platform: Any CPU
 nuget:
   account_feed: true
