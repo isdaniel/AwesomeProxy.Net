@@ -136,3 +136,4 @@ _NCrunch*
 /src/AwesomeProxy/*.exe
 /src/AwesomeProxy/*.nuspec
 /src/.vs
+/nuget/*.nupkg

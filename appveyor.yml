@@ -18,7 +18,7 @@ build:
   publish_azure_webjob: true
   verbosity: minimal
 artifacts:
-- path: temp_file\**\*.nupkg
+- path: nuget\**\*.nupkg
   name: NuGet
 deploy:
 - provider: NuGet
@@ -26,6 +26,6 @@ deploy:
   api_key:
     secure: N8XhMwrR9A+0U9zzYYMOWF3xzD1miiu824syuaN1ovk=
   skip_symbols: false
-  artifact: /.*\.nupkg/
+  artifact: nuget\*.nupkg
   on:
     branch: master
