@@ -9,5 +9,3 @@ test:
   assemblies:
     only:
       - 'src\bin\**\*.tests.dll'
-	  
- 
