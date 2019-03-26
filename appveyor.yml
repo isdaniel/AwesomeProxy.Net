@@ -1,4 +1,4 @@
-version: 1.0.'{build}'
+version: build '{build}'
 pull_requests:
   do_not_increment_build_number: true
 branches:
@@ -17,15 +17,11 @@ build:
   project: src/AwesomeProxy.sln
   publish_azure_webjob: true
   verbosity: minimal
-artifacts:
-- path: '*.nupkg'
-  name: NuGet
 deploy:
 - provider: NuGet
   server: https://api.nuget.org/v3/index.json
   api_key:
     secure: oZ0W/lO60ivXmzYEYAw0CEd8225s5BVgkTwsubzPKesVTBqsNbC4LwJIeci9QC3r
   skip_symbols: false
-  artifact: '*.nupkg'
   on:
     branch: master
