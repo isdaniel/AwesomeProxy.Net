@@ -12,7 +12,7 @@ namespace AwesomeProxy.FilterAttribute
         /// 執行後攔截方法
         /// </summary>
         /// <param name="result"></param>
-        public virtual void OnExcuted(ExcutedContext context)
+        public virtual void OnExecuted(ExecutedContext context)
         {
         }
 
@@ -20,7 +20,7 @@ namespace AwesomeProxy.FilterAttribute
         /// 執行前攔截方法
         /// </summary>
         /// <param name="args"></param>
-        public virtual void OnExcuting(ExcuteingContext context)
+        public virtual void OnExecuting(ExecutingContext context)
         {
         }
 

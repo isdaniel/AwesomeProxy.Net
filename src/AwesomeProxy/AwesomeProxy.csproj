@@ -41,7 +41,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ExcuteingContext.cs" />
+    <Compile Include="ContextBase.cs" />
+    <Compile Include="ExceptionContext.cs" />
+    <Compile Include="ExecutedContext.cs" />
+    <Compile Include="ExecutingContext.cs" />
     <Compile Include="FilterProvider.cs" />
     <Compile Include="ProxyFactory.cs" />
     <Compile Include="DynamicProxy.cs" />

@@ -7,11 +7,11 @@ namespace AwesomeProxy.Test
 {
     public class Test1Attribute : AopBaseAttribute
     {
-        public override void OnExcuted(ExcutedContext result)
+        public override void OnExecuted(ExecutedContext result)
         {
         }
 
-        public override void OnExcuting(ExcuteingContext input)
+        public override void OnExecuting(ExecutingContext input)
         {
             List<object> oList = new List<object>();
             foreach (string s in input.Args)
@@ -49,7 +49,7 @@ namespace AwesomeProxy.Test
 
     public class RefAttribute : AopBaseAttribute
     {
-        public override void OnExcuting(ExcuteingContext args)
+        public override void OnExecuting(ExecutingContext args)
         {
             if (args.Args.FirstOrDefault() != null)
             {
@@ -60,7 +60,7 @@ namespace AwesomeProxy.Test
 
     public class OutAttribute : AopBaseAttribute
     {
-        public override void OnExcuting(ExcuteingContext args)
+        public override void OnExecuting(ExecutingContext args)
         {
             if (args.Args.FirstOrDefault() != null)
             {
@@ -69,7 +69,7 @@ namespace AwesomeProxy.Test
             }
         }
 
-        public override void OnExcuted(ExcutedContext result)
+        public override void OnExecuted(ExecutedContext result)
         {
             if (result.Args.FirstOrDefault() != null)
             {

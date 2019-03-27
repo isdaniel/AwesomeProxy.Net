@@ -5,9 +5,9 @@
     /// </summary>
     public interface IExcuteFilter
     {
-        void OnExcuted(ExcutedContext excuteContext);
+        void OnExecuted(ExecutedContext executeContext);
 
-        void OnExcuting(ExcuteingContext excutingContext);
+        void OnExecuting(ExecutingContext executing);
     }
 
     /// <summary>

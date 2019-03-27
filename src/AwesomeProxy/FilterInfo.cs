@@ -12,8 +12,8 @@ namespace AwesomeProxy
     /// </summary>
     public class FilterInfo
     {
-        private List<IExcuteFilter> _excuteFilters = new List<IExcuteFilter>();
-        private List<IExceptionFilter> _exceptionFilters = new List<IExceptionFilter>();
+        private readonly List<IExcuteFilter> _executeFilters = new List<IExcuteFilter>();
+        private readonly List<IExceptionFilter> _exceptionFilters = new List<IExceptionFilter>();
 
         public FilterInfo(MarshalByRefObject target, MethodInfo method)
         {
@@ -24,15 +24,15 @@ namespace AwesomeProxy
 
             var unionAttr = classAttr.Union(methodAttr);
 
-            _excuteFilters.AddRange(unionAttr.OfType<IExcuteFilter>());
+            _executeFilters.AddRange(unionAttr.OfType<IExcuteFilter>());
             _exceptionFilters.AddRange(unionAttr.OfType<IExceptionFilter>());
         }
 
-        public IList<IExcuteFilter> ExcuteFilters
+        public IList<IExcuteFilter> ExecuteFilters
         {
             get
             {
-                return _excuteFilters;
+                return _executeFilters;
             }
         }
 

@@ -50,8 +50,8 @@ namespace AwesomeProxy.Test
     [TestFixture]
     public class AOPTest
     {
-        private ExcutedContext _excutedContext;
-        private ExcuteingContext _excutingContext;
+        private ExecutedContext _executedContext;
+        private ExecutingContext _executing;
 
         [SetUp]
         public void Init()
@@ -60,32 +60,32 @@ namespace AwesomeProxy.Test
             Mock<IMethodReturnMessage> moqReturnMessage = new Mock<IMethodReturnMessage>();
 
             moqCallMessage.Setup(o => o.Args).Returns(new object[] { "12345!!##,,11dasd" });
-            moqCallMessage.Setup(o => o.MethodName).Returns("Test_ExcutedContext");
+            moqCallMessage.Setup(o => o.MethodName).Returns("Test_ExecutedContext");
             moqReturnMessage.Setup(o => o.ReturnValue).Returns(It.IsAny<object>);
 
-            _excutedContext = new ExcutedContext(moqReturnMessage.Object);
-            _excutingContext = new ExcuteingContext(moqCallMessage.Object);
+            _executedContext = new ExecutedContext(moqReturnMessage.Object);
+            _executing = new ExecutingContext(moqCallMessage.Object);
         }
 
         [Test]
-        public void MethodExcuting_Test()
+        public void MethodExecuting_Test()
         {
             Test1Attribute t = new Test1Attribute();
-            t.OnExcuting(_excutingContext);
+            t.OnExecuting(_executing);
 
             var except = new object[] { "12345,,11dasd" };
-            var result = _excutingContext.Args;
+            var result = _executing.Args;
 
             Assert.AreEqual(except, result);
         }
 
         [Test]
-        public void MethodExcuted_MethoNameNull_True()
+        public void MethodExecuted_MethodNameNull_True()
         {
             Test1Attribute t = new Test1Attribute();
-            t.OnExcuted(_excutedContext);
+            t.OnExecuted(_executedContext);
 
-            var result = _excutedContext.MethodName;
+            var result = _executedContext.MethodName;
 
             Assert.AreEqual(null, result);
         }
@@ -154,19 +154,19 @@ namespace AwesomeProxy.Test
         public void InputString_GetFirstArg_True()
         {
             var except = "12345!!##,,11dasd";
-            var result = _excutingContext.GetFirstArg<string>();
+            var result = _executing.GetFirstArg<string>();
 
             Assert.AreEqual(except, result);
         }
 
 
         [Test]
-        public void InputString_TryGetFristArg_True()
+        public void InputString_TryGetFirstArg_True()
         {
             var except = "12345!!##,,11dasd";
             string result;
 
-            Assert.AreEqual(true, _excutingContext.TryGetFristArg(out result));
+            Assert.AreEqual(true, _executing.TryGetFirstArg(out result));
             Assert.AreEqual(except, result);
         }
     }
