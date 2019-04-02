@@ -1,4 +1,4 @@
-nuget pack ..\src\AwesomeProxy\AwesomeProxy.nuspec
+nuget pack ..\src\AwesomeProxy\
 
 for /f "delims=" %%a in ('dir /s /b *.nupkg') do set filename=%%~nxa
 
