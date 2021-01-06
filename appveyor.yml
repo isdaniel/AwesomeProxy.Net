@@ -12,7 +12,7 @@ environment:
 
 
 build_script:
-  - dotnet build src\AwesomeProxy.sln
+  - dotnet build src\AwesomeProxy.sln -c Release
   - dotnet test src\AwesomeProxy.Test
 after_build:
   - dotnet pack src\AwesomeProxy
