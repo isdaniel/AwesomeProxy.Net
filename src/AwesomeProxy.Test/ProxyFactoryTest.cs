@@ -1,5 +1,4 @@
 ﻿using System;
-using NuGet.Frameworks;
 using NUnit.Framework;
 
 namespace AwesomeProxy.Test
