@@ -2,31 +2,29 @@ image: Visual Studio 2019
 version: build '{build}'
 configuration: Release
 platform: Any CPU
-
 before_build:
-  - cmd: nuget restore src\AwesomeProxy.sln
+- cmd: nuget restore src\AwesomeProxy.sln
   
 environment:
   my_variable:
     secure: GWztiV993airUIgYQa/8Yp0jZuZ9IWVjAJDxwBRTOvN2C5pBqlArgsUY4uqrGujp
-
+    
+build:
+  publish_nuget: true
 
 build_script:
   - dotnet build src\AwesomeProxy.sln -c Release
   - dotnet test src\AwesomeProxy.Test
 after_build:
-  - dotnet pack src\AwesomeProxy
+  - dotnet pack src\AwesomeProxy\AwesomeProxy.csproj
 
 deploy:
-- provider: NuGet
-  api_key:
-    secure: GWztiV993airUIgYQa/8Yp0jZuZ9IWVjAJDxwBRTOvN2C5pBqlArgsUY4uqrGujp
-  on:
-    branch: master  
-  artifact: /.*(\.|\.s)nupkg/
-  
-build:
-  publish_nuget: true
+  - provider: NuGet
+    api_key:
+      secure: GWztiV993airUIgYQa/8Yp0jZuZ9IWVjAJDxwBRTOvN2C5pBqlArgsUY4uqrGujp
+    on:
+        branch: master
+    artifact: /.*(\.|\.s)nupkg/
   
 nuget:
   project_feed: true
