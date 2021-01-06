@@ -14,18 +14,18 @@ before_build:
   - cmd: nuget restore src\AwesomeProxy.sln
 
 build_script:
-  - cmd: Msbuild restore src\AwesomeProxy.sln
+  - cmd: dotnet build src\AwesomeProxy.sln
+  - cmd: dotnet test src\AwesomeProxy.Test
+after_build:
+  - dotnet pack src\AwesomeProxy
 
-# after_build:
-  # - dotnet pack src\AwesomeProxy
-
-# deploy:
-# - provider: NuGet
-  # api_key:
-    # secure: GWztiV993airUIgYQa/8Yp0jZuZ9IWVjAJDxwBRTOvN2C5pBqlArgsUY4uqrGujp
-  # on:
-    # branch: master  
-  # artifact: /.*(\.|\.s)nupkg/
+deploy:
+- provider: NuGet
+  api_key:
+    secure: GWztiV993airUIgYQa/8Yp0jZuZ9IWVjAJDxwBRTOvN2C5pBqlArgsUY4uqrGujp
+  on:
+    branch: master  
+  artifact: /.*(\.|\.s)nupkg/
   
 build:
   publish_nuget: true
