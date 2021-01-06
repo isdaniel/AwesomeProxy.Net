@@ -15,7 +15,7 @@ namespace AwesomeProxy
         private readonly List<IExcuteFilter> _executeFilters = new List<IExcuteFilter>();
         private readonly List<IExceptionFilter> _exceptionFilters = new List<IExceptionFilter>();
 
-        public FilterInfo(MarshalByRefObject target, MethodInfo method)
+        public FilterInfo(object target, MethodInfo method)
         {
             //search for class Attribute
             var classAttr = target.GetType().GetCustomAttributes(typeof(Attribute), true);

@@ -1,46 +1,34 @@
 ﻿using System;
+using NuGet.Frameworks;
 using NUnit.Framework;
 
 namespace AwesomeProxy.Test
 {
-    public abstract class InheritMarshalByRefObject : MarshalByRefObject
+    public interface IA
     {
+
     }
 
-    public class InheritSubClass : InheritMarshalByRefObject
-    {
-    }
-
-    public class NoInheritMarshalByRefObject
+    public class A : IA
     {
     }
 
     [TestFixture]
     public class ProxyFactoryTest
     {
-        [Test]
-        public void NoArgs_InheritMarshalByRefObject_True()
-        {
-            var DFactory = ProxyFactory.GetProxyInstance(new InheritSubClass());
-        }
 
         [Test]
         public void ProxyFactory_InheritTest_True()
         {
-            ProxyFactory.GetProxyInstance<InheritMarshalByRefObject>(typeof(InheritSubClass));
+           var obj = ProxyFactory.GetProxyInstance<IA>(typeof(A));
+           Assert.IsNotNull(obj);
         }
 
         [Test]
-        public void ProxyFactory_InheritTest_ThrowEx()
+        public void ProxyFactory_InheritTest_NoType()
         {
-            var Except = "傳入 subjectType 需繼承於InheritMarshalByRefObject";
-
-            var Result = Assert.Throws<ArgumentException>(() =>
-            {
-                ProxyFactory.GetProxyInstance<InheritMarshalByRefObject>(typeof(NoInheritMarshalByRefObject));
-            });
-
-            Assert.AreEqual(Result.Message, Except);
+            var obj = ProxyFactory.GetProxyInstance<IA,A>();
+            Assert.IsNotNull(obj);
         }
 
         [Test]
@@ -48,7 +36,7 @@ namespace AwesomeProxy.Test
         {
             var Except = "TestError";
 
-            var Result = ProxyFactory.GetProxyInstance<CError>().GetError();
+            var Result = ProxyFactory.GetProxyInstance<ICError>(()=>new CError()).GetError();
 
             Assert.AreEqual(Result, Except);
         }

@@ -1,77 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Runtime.Remoting.Messaging;
-using System.Runtime.Remoting.Proxies;
 
 namespace AwesomeProxy
 {
     /// <summary>
     /// AOP Proxy Class
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    internal class DynamicProxy<T> : RealProxy
-        where T : MarshalByRefObject
+    /// <typeparam name="TObject"></typeparam>
+    public class DynamicProxy<TObject> : DispatchProxy
     {
-        private readonly T _target;
-
-        private IMethodCallMessage _callMethod = null;
-
-        private IMethodReturnMessage _returnMethod = null;
-
-        public DynamicProxy(T target) : base(typeof(T))
-        {
-            _target = target;
-        }
-
-        /// <summary>
-        /// Execute RealSubject Method
-        /// </summary>
-        /// <param name="msg"></param>
-        /// <returns></returns>
-        public override IMessage Invoke(IMessage msg)
-        {
-            _callMethod = msg as IMethodCallMessage;
-            MethodInfo targetMethod = _callMethod.MethodBase as MethodInfo;
-
-            FilterInfo filterInfo = new FilterInfo(_target, targetMethod);
-
-            try
-            {
-                ExecutingContext executing = Executing(filterInfo.ExecuteFilters);
-                if (executing.Result != null)
-                {
-                    _returnMethod = GetReturnMessage(executing.Result, executing.Args);
-                }
-                else
-                {
-                    InvokeMethod(targetMethod, executing);
-
-                    //Execute Executed Filters
-                    Executed(filterInfo.ExecuteFilters);
-                }
-            }
-            catch (Exception ex)
-            {
-                ExceptionContext exception = OnException(filterInfo.ExceptionFilters, ex);
-                //Is There any Customer error Result
-                if (exception.Result != null)
-                {
-                    _returnMethod = GetReturnMessage(exception.Result, exception.Args);
-                }
-                else
-                {
-                    _returnMethod = new ReturnMessage(ex, _callMethod);
-                }
-            }
-            return _returnMethod;
-        }
-
-        private void InvokeMethod(MethodInfo targetMethod, ExecutingContext excuting)
-        {
-            object result = targetMethod.Invoke(_target, excuting.Args);
-            _returnMethod = GetReturnMessage(result, excuting.Args);
-        }
+        private TObject _target;
+        private MethodInfo _targetMethod;
+        private object[] _args;
 
         /// <summary>
         /// 執行Exception過濾器
@@ -81,7 +22,7 @@ namespace AwesomeProxy
         /// <returns></returns>
         private ExceptionContext OnException(IList<IExceptionFilter> exceptionFilter, Exception ex)
         {
-            ExceptionContext exceptionContext = new ExceptionContext(_callMethod)
+            ExceptionContext exceptionContext = new ExceptionContext(_targetMethod,_args)
             {
                 Exception = ex
             };
@@ -96,9 +37,18 @@ namespace AwesomeProxy
             return exceptionContext;
         }
 
-        private ExecutedContext Executed(IList<IExcuteFilter> filters)
+        public static TObject CreateProxy(Func<TObject> creator)
         {
-            ExecutedContext executeContext = new ExecutedContext(_returnMethod);
+            object proxy = Create<TObject, DynamicProxy<TObject>>();
+            ((DynamicProxy<TObject>) proxy)._target = creator();
+
+            return (TObject)proxy;
+        }
+
+
+        private void Executed(IList<IExcuteFilter> filters, object returnValue)
+        {
+            ExecutedContext executeContext = new ExecutedContext(_targetMethod, _args, returnValue);
 
             foreach (var filter in filters)
             {
@@ -106,14 +56,12 @@ namespace AwesomeProxy
                 if (executeContext.Result != null)
                     break;
             }
-
-            return executeContext;
         }
 
         private ExecutingContext Executing(IList<IExcuteFilter> filters)
         {
             //封裝執行前上下文
-            ExecutingContext execute = new ExecutingContext(_callMethod);
+            ExecutingContext execute = new ExecutingContext(_targetMethod, _args);
 
             foreach (var filter in filters)
             {
@@ -125,13 +73,38 @@ namespace AwesomeProxy
             return execute;
         }
 
-        private ReturnMessage GetReturnMessage(object result, object[] args)
+        protected override object Invoke(MethodInfo targetMethod, object[] args)
         {
-            return new ReturnMessage(result,
-                                     args,
-                                     args.Length,
-                                     _callMethod.LogicalCallContext,
-                                     _callMethod);
+            FilterInfo filterInfo = new FilterInfo(_target, targetMethod);
+            _targetMethod = targetMethod;
+            _args = args;
+            object result;
+            try
+            {
+                ExecutingContext executing = Executing(filterInfo.ExecuteFilters);
+
+                if (executing.Result != null)
+                {
+                    return executing.Result;
+                }
+
+                result = targetMethod.Invoke(_target, args);
+
+                //Execute Executed Filters
+                Executed(filterInfo.ExecuteFilters, result);
+            }
+            catch (Exception ex)
+            {
+                ExceptionContext exception = OnException(filterInfo.ExceptionFilters, ex);
+                //Is There any Customer error Result
+                if (exception.Result != null)
+                {
+                    return exception.Result;
+                }
+
+                throw ex;
+            }
+            return result;
         }
     }
 }

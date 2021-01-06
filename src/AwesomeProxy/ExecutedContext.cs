@@ -1,4 +1,4 @@
-﻿using System.Runtime.Remoting.Messaging;
+﻿using System.Reflection;
 
 namespace AwesomeProxy
 {
@@ -7,11 +7,11 @@ namespace AwesomeProxy
     /// </summary>
     public class ExecutedContext : ContextBase
     {
-        public ExecutedContext(IMethodReturnMessage returnMethod)
+        public ExecutedContext(MethodInfo methodInfo,object[] args,object returnValue)
         {
-            Args = returnMethod.Args;
-            MethodName = returnMethod.MethodName;
-            Result = returnMethod.ReturnValue;
+            Args = args;
+            MethodName = methodInfo.Name;
+            Result = returnValue;
         }
     }
 }
