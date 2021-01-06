@@ -1,51 +1,10 @@
 ﻿using NUnit.Framework;
 using Moq;
-using System.Runtime.Remoting.Messaging;
 using System;
+using System.Reflection;
 
 namespace AwesomeProxy.Test
 {
-    public class CError : MarshalByRefObject {
-        [CustomerError]
-        public string GetError() {
-            throw new Exception("test");
-        }
-    }
-
-    public class ExcptionClass : MarshalByRefObject
-    {
-        [Exception]
-        public string GetException(string errorMsg)
-        {
-            throw new Exception(errorMsg);
-        }
-
-        [DefaultException(DefaultErrorMsg = "DefaultException")]
-        public string ThrowDefaultExcption()
-        {
-            throw new Exception();
-        }
-
-        public void NormalExcption(string msg)
-        {
-            throw new Exception(msg);
-        }
-    }
-
-    public class RefArgClass : MarshalByRefObject
-    {
-        [Ref]
-        public void ExcuteRef(ref string name)
-        {
-            name = $"Hello {name}";
-        }
-
-        [Out]
-        public void ExcuteOut(out string name)
-        {
-            name = $"Hello ";
-        }
-    }
 
     [TestFixture]
     public class AOPTest
@@ -56,15 +15,12 @@ namespace AwesomeProxy.Test
         [SetUp]
         public void Init()
         {
-            Mock<IMethodCallMessage> moqCallMessage = new Mock<IMethodCallMessage>();
-            Mock<IMethodReturnMessage> moqReturnMessage = new Mock<IMethodReturnMessage>();
+            Mock<MethodInfo> moqmethodInfo = new Mock<MethodInfo>();
+            var args = new object[] {"12345!!##,,11dasd"};
+            moqmethodInfo.Setup(o => o.Name).Returns("Test_ExecutedContext");
 
-            moqCallMessage.Setup(o => o.Args).Returns(new object[] { "12345!!##,,11dasd" });
-            moqCallMessage.Setup(o => o.MethodName).Returns("Test_ExecutedContext");
-            moqReturnMessage.Setup(o => o.ReturnValue).Returns(It.IsAny<object>);
-
-            _executedContext = new ExecutedContext(moqReturnMessage.Object);
-            _executing = new ExecutingContext(moqCallMessage.Object);
+            _executedContext = new ExecutedContext(moqmethodInfo.Object, args, It.IsAny<object>());
+            _executing = new ExecutingContext(moqmethodInfo.Object, args);
         }
 
         [Test]
@@ -87,14 +43,14 @@ namespace AwesomeProxy.Test
 
             var result = _executedContext.MethodName;
 
-            Assert.AreEqual(null, result);
+            Assert.AreEqual("Test_ExecutedContext", result);
         }
 
         [Test]
         public void Method_Exception_ErrorString()
         {
-            string result = ProxyFactory.GetProxyInstance(new ExcptionClass()).GetException("錯誤!!");
-
+            string result = ProxyFactory.GetProxyInstance<IExceptionClass>(()=> new ExceptionClass()).GetException("錯誤!!");
+           
             Assert.AreEqual(result, "錯誤!!");
         }
 
@@ -107,18 +63,18 @@ namespace AwesomeProxy.Test
 
             string outString;
 
-            ProxyFactory.GetProxyInstance(new RefArgClass()).ExcuteRef(ref arg);
+            ProxyFactory.GetProxyInstance<IRefArgClass>(()=>new RefArgClass()).ExecuteRef(ref arg);
             Assert.AreEqual(exceptRef, arg);
 
-            ProxyFactory.GetProxyInstance(new RefArgClass()).ExcuteOut(out outString);
+            ProxyFactory.GetProxyInstance<IRefArgClass>(() => new RefArgClass()).ExecuteOut(out outString);
             Assert.AreEqual(exceptOut, outString);
         }
 
         [Test]
-        public void Method_DefaultException_ThrowDefaultExcption()
+        public void Method_DefaultException_ThrowDefaultException()
         {
             string except = "DefaultException";
-            string result = ProxyFactory.GetProxyInstance(new ExcptionClass()).ThrowDefaultExcption();
+            string result = ProxyFactory.GetProxyInstance<IExceptionClass>(() => new ExceptionClass()).ThrowDefaultException();
 
             Assert.AreEqual(except, result);
         }
@@ -130,7 +86,7 @@ namespace AwesomeProxy.Test
 
             Exception ex = Assert.Throws<Exception>(() =>
             {
-                new ExcptionClass().NormalExcption(except);
+                new ExceptionClass().NormalException(except);
             });
 
             Assert.That(ex.Message, Is.EqualTo(except));
@@ -141,10 +97,10 @@ namespace AwesomeProxy.Test
         {
             string except = "DefaultException";
 
-            System.Reflection.TargetInvocationException ex = Assert.Throws<System.Reflection.TargetInvocationException>(() =>
+            TargetInvocationException ex = Assert.Throws<TargetInvocationException>(() =>
             {
-                ProxyFactory.GetProxyInstance(new ExcptionClass())
-                .NormalExcption(except);
+                ProxyFactory.GetProxyInstance<IExceptionClass>(() => new ExceptionClass())
+                .NormalException(except);
             });
 
             Assert.That(ex.InnerException.Message, Is.EqualTo(except));

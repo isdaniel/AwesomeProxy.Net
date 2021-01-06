@@ -1,14 +1,15 @@
 ﻿using System;
-using System.Runtime.Remoting.Messaging;
+using System.Reflection;
+
 
 namespace AwesomeProxy
 {
     public class ExceptionContext : ContextBase
     {
-        public ExceptionContext(IMethodCallMessage callMessage)
+        public ExceptionContext(MethodInfo methodInfo,object[] args)
         {
-            Args = callMessage.InArgs;
-            MethodName = callMessage.MethodName;
+            Args = args;
+            MethodName = methodInfo.Name;
         }
 
         /// <summary>

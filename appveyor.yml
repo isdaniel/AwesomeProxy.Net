@@ -1,27 +1,34 @@
+image: Visual Studio 2019
 version: build '{build}'
-pull_requests:
-  do_not_increment_build_number: true
-branches:
-  only:
-  - master
-skip_tags: true
 configuration: Release
 platform: Any CPU
-shallow_clone: true
-nuget:
-  account_feed: true
-  project_feed: true
 before_build:
 - cmd: nuget restore src\AwesomeProxy.sln
+  
+environment:
+  my_variable:
+    secure: GWztiV993airUIgYQa/8Yp0jZuZ9IWVjAJDxwBRTOvN2C5pBqlArgsUY4uqrGujp
+    
 build:
-  project: src/AwesomeProxy.sln
-  publish_azure_webjob: true
-  verbosity: minimal
+  publish_nuget: true
+
+build_script:
+  - dotnet build src\AwesomeProxy.sln -c Release
+  - dotnet test src\AwesomeProxy.Test
+after_build:
+  - dotnet pack src\AwesomeProxy\AwesomeProxy.csproj
+
 deploy:
-- provider: NuGet
-  server: https://api.nuget.org/v3/index.json
-  api_key:
-    secure: oZ0W/lO60ivXmzYEYAw0CEd8225s5BVgkTwsubzPKesVTBqsNbC4LwJIeci9QC3r
-  skip_symbols: false
-  on:
-    branch: master
+  - provider: NuGet
+    api_key:
+      secure: GWztiV993airUIgYQa/8Yp0jZuZ9IWVjAJDxwBRTOvN2C5pBqlArgsUY4uqrGujp
+    on:
+        branch: master
+    artifact: /.*(\.|\.s)nupkg/
+  
+nuget:
+  project_feed: true
+        
+artifacts:
+  - path: '**\*.nupkg'
+  - path: '**\*.snupkg'
