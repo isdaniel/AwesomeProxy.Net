@@ -3,19 +3,17 @@ version: build '{build}'
 configuration: Release
 platform: Any CPU
 
+before_build:
+  - cmd: nuget restore src\AwesomeProxy.sln
+  
 environment:
   my_variable:
     secure: GWztiV993airUIgYQa/8Yp0jZuZ9IWVjAJDxwBRTOvN2C5pBqlArgsUY4uqrGujp
 
-pull_requests:
-  do_not_increment_build_number: true
-
-before_build:
-  - cmd: nuget restore src\AwesomeProxy.sln
 
 build_script:
-  - cmd: dotnet build src\AwesomeProxy.sln
-  - cmd: dotnet test src\AwesomeProxy.Test
+  - dotnet build src\AwesomeProxy.sln
+  - dotnet test src\AwesomeProxy.Test
 after_build:
   - dotnet pack src\AwesomeProxy
 

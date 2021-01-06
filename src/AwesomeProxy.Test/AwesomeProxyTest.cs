@@ -6,10 +6,6 @@ using System.Reflection;
 namespace AwesomeProxy.Test
 {
 
-
-
-
-
     [TestFixture]
     public class AOPTest
     {
