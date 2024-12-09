@@ -16,8 +16,9 @@ namespace AwesomeProxy
             where TObject : class,new()
             where TInterface:class
         {
-            var target = Activator.CreateInstance(typeof(TObject), para) as TInterface;
-            return GetProxyInstance(()=> target);
+            Type realObjectType = HasConstrcutorMetod(typeof(TObject),para);
+            var target = Activator.CreateInstance(realObjectType, para) as TInterface;
+            return GetProxyInstance(() => target);
         }
 
         /// <summary>
@@ -30,6 +31,7 @@ namespace AwesomeProxy
         public static TInterface GetProxyInstance<TInterface>(Type subjectType, object[] para = null)
             where TInterface : class
         {
+            HasConstrcutorMetod(subjectType, para);
             TInterface obj = Activator.CreateInstance(subjectType, para) as TInterface;
 
             if (obj == null)
@@ -49,8 +51,26 @@ namespace AwesomeProxy
         public static TObject GetProxyInstance<TObject>(Func<TObject> realSubject)
              where TObject : class
         {
+            if (realSubject == null)
+            {
+                throw new NullReferenceException("realSubject delegation function can't be null!");
+            }
 
             return DynamicProxy<TObject>.CreateProxy(realSubject);
         }
+
+        private static Type HasConstrcutorMetod(Type realObjectType, object[] para)
+        {
+            var parameterTypes = para?.Select(p => p?.GetType()).ToArray() ?? Type.EmptyTypes;
+            var constructor = realObjectType.GetConstructor(parameterTypes);
+
+            if (constructor == null)
+            {
+                throw new MissingMethodException($"Type '{realObjectType.Name}' does not have a matching constructor.");
+            }
+
+            return realObjectType;
+        }
+
     }
 }
