@@ -39,6 +39,11 @@ namespace AwesomeProxy
 
         public static TObject CreateProxy(Func<TObject> creator)
         {
+            if (creator == null)
+            {
+                throw new NullReferenceException("creator delegation function can't be null!");
+            }
+
             object proxy = Create<TObject, DynamicProxy<TObject>>();
             ((DynamicProxy<TObject>) proxy)._target = creator();
 
