@@ -59,6 +59,37 @@ namespace AwesomeProxy
             return DynamicProxy<TObject>.CreateProxy(realSubject);
         }
 
+        /// <summary>
+        /// 取得代理實體
+        /// </summary>
+        /// <param name="para">建構子參數</param>
+        public static TInterface GetProxyInstanceWithParams<TInterface, TObject>(params object[] para)
+            where TObject : class, new()
+            where TInterface : class
+        {
+            Type realObjectType = HasConstrcutorMetod(typeof(TObject), para);
+            var target = Activator.CreateInstance(realObjectType, para) as TInterface;
+            return GetProxyInstance(() => target);
+        }
+
+        /// <summary>
+        /// 取得代理實體
+        /// </summary>
+        /// <param name="para">建構子參數</param>
+        public static TInterface GetProxyInstanceWithParams<TInterface>(Type subjectType, params object[] para)
+            where TInterface : class
+        {
+            HasConstrcutorMetod(subjectType, para);
+            TInterface obj = Activator.CreateInstance(subjectType, para) as TInterface;
+
+            if (obj == null)
+            {
+                throw new ArgumentException($"傳入 subjectType 需繼承於{typeof(TInterface).Name}");
+            }
+
+            return GetProxyInstance(() => obj);
+        }
+
         private static Type HasConstrcutorMetod(Type realObjectType, object[] para)
         {
             var parameterTypes = para?.Select(p => p?.GetType()).ToArray() ?? Type.EmptyTypes;

@@ -54,6 +54,20 @@ namespace AwesomeProxy.Test
         }
 
         [Test]
+        public void GetProxyInstanceWithParams_NotHaveMatchingConstructor_Parameter_ThrowArgumentException()
+        {
+            var expectedErrorMsg = $"Type 'A' does not have a matching constructor.";
+            Assert.Throws<MissingMethodException>(() => { ProxyFactory.GetProxyInstanceWithParams<IA>(typeof(A), new object(), new object()); }, expectedErrorMsg);
+        }
+
+        [Test]
+        public void GetProxyInstanceWithParams_NotHaveMatchingConstructor_Generic_ThrowArgumentException()
+        {
+            var expectedErrorMsg = $"Type 'A' does not have a matching constructor.";
+            Assert.Throws<MissingMethodException>(() => { ProxyFactory.GetProxyInstanceWithParams<IA, A>(typeof(A), new object(), new object()); }, expectedErrorMsg);
+        }
+
+        [Test]
         public void ProxyFactory_GetCustomerError()
         {
             var Except = "TestError";
@@ -70,7 +84,5 @@ namespace AwesomeProxy.Test
 
             Assert.Throws<NullReferenceException>(() => ProxyFactory.GetProxyInstance<ICError>(null) , ExpectErrorMesg);
         }
-
-
     }
 }
