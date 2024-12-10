@@ -35,7 +35,10 @@ AwesomeProxy.Net 主要是攔截方法處理
 
 
 ### How to Use:
+
    使用方法類似於Asp.Net MVC中Contoller，Action過濾器
+
+#### Before 1.5 version
 
 1.	撰寫一個標籤(Attribute) 標記攔截動作
 ```c#
@@ -43,7 +46,7 @@ public class CacheAttribute : AopBaseAttribute
 {
     public string CacheName { get; set; }
 
-    public override void OnExcuting(ExcuteingContext context)
+    public override void OnExcuting(ExecuteingContext context)
     {
         object cacheObj = CallContext.GetData(CacheName);
         if (cacheObj != null)
@@ -52,7 +55,7 @@ public class CacheAttribute : AopBaseAttribute
         }
     }
 
-    public override void OnExcuted(ExcutedContext context)
+    public override void OnExcuted(ExecutedContext context)
     {
         CallContext.SetData(CacheName, context.Result);
     }
@@ -85,6 +88,60 @@ CacheService cache = ProxyFactory.GetProxyInstance<CacheService>();
 Console.WriteLine(cache.GetCacheDate());
 ```
 
+#### after 1.5 version
+
+1.	撰寫一個標籤(Attribute) 標記攔截動作
+
+```
+public class CacheAttribute : AopBaseAttribute
+{
+	public string CacheName { get; set; }
+	
+	public override void OnExecuted(ExecutedContext context)
+	{
+	    CallContext.SetData(CacheName, context.Result);
+	}
+
+	public override void OnExecuting(ExecutingContext context)
+	{
+	    object cacheObj = CallContext.GetData(CacheName);
+	    if (cacheObj != null)
+	    {
+		context.Result = cacheObj;
+	    }
+	}
+}
+```
+
+2. 建立 interface and class
+
+```
+public class CacheService : ICacheService
+{
+	public string GetCacheDate()
+	{
+	    return DateTime.Now.ToString("yyyy/MM/dd hh:mm:ss");
+	}
+}
+
+public interface ICacheService {
+	[Cache(CacheName = "GetCacheDate")]
+	public string GetCacheDate();
+}
+```
+
+3. 由ProxyFactory.GetProxyInstance 動態產生被代理類別
+``` c#
+var cache = ProxyFactory.GetProxyInstance<CacheService>();
+```
+
+
+4.直接呼叫方法就可執行標籤上的攔截動作
+
+```C#
+var cache = ProxyFactory.GetProxyInstance<CacheService>();
+Console.WriteLine(cache.GetCacheDate());
+```
 
 Simple Code：
 
