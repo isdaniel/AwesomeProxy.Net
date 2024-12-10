@@ -136,10 +136,7 @@ namespace AwesomeProxy.Test
 
             var act = proxyInstance.RecordInfo("Enter the password: abc1234");
 
-            var expect = @"hello world!
-AwesomeProxy is so good!
-Enter the password: *******
-";
+            var expect = "hello world!\r\nAwesomeProxy is so good!\r\nEnter the password: *******\r\n";
 
             Assert.AreEqual(expect, act);
         }
@@ -153,10 +150,7 @@ Enter the password: *******
 
             var act = proxyInstance.RecordInfo("Enter the password: abc1234");
 
-            var expect = @"hello world!
-AwesomeProxy is so good!
-Enter the password: *******
-";
+            var expect = "hello world!\r\nAwesomeProxy is so good!\r\nEnter the password: *******\r\n";
 
             Assert.AreEqual(expect, act);
         }
@@ -170,10 +164,7 @@ Enter the password: *******
 
             var act = proxyInstance.RecordInfo("Enter the password: abc1234");
 
-            var expect = @"hello world!
-AwesomeProxy is so good!
-Enter the password: *******
-";
+            var expect = "hello world!\r\nAwesomeProxy is so good!\r\nEnter the password: *******\r\n";
 
             Assert.AreEqual(expect, act);
         }
@@ -187,10 +178,7 @@ Enter the password: *******
 
             var act = proxyInstance.RecordInfo("Enter the password: abc1234");
 
-            var expect = @"hello world!
-AwesomeProxy is so good!
-Enter the password: *******
-";
+            var expect = "hello world!\r\nAwesomeProxy is so good!\r\nEnter the password: *******\r\n";
 
             Assert.AreEqual(expect, act);
         }
