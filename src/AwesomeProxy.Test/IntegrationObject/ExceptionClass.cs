@@ -1,10 +1,10 @@
 ﻿using System;
 
-namespace AwesomeProxy.Test
+namespace AwesomeProxy.Test.IntegrationObject
 {
     public class ExceptionClass : IExceptionClass
     {
-     
+
         public string GetException(string errorMsg)
         {
             throw new Exception(errorMsg);

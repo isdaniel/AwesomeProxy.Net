@@ -9,7 +9,7 @@
 	<RepositoryType>git</RepositoryType>
 	<PackageProjectUrl>https://github.com/isdaniel/AwesomeProxy.Net</PackageProjectUrl>
 	<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-	<Version>1.5</Version>
+	<Version>1.6</Version>
 	<PackageReleaseNotes>Support for .net standerd 2.0(which mean support .net core) and .net version higher than 4.62</PackageReleaseNotes>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

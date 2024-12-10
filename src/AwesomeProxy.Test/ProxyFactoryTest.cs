@@ -1,4 +1,5 @@
 ﻿using System;
+using AwesomeProxy.Test.IntegrationObject;
 using NUnit.Framework;
 
 namespace AwesomeProxy.Test

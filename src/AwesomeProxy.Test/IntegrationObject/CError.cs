@@ -1,11 +1,12 @@
 ﻿using System;
 
-namespace AwesomeProxy.Test
+namespace AwesomeProxy.Test.IntegrationObject
 {
     public class CError : ICError
     {
-     
-        public string GetError() {
+
+        public string GetError()
+        {
             throw new Exception("test");
         }
     }

@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace AwesomeProxy.Test
+namespace AwesomeProxy.Test.IntegrationObject
 {
     public class Test1Attribute : AopBaseAttribute
     {
@@ -22,7 +22,8 @@ namespace AwesomeProxy.Test
         }
     }
 
-    public class CustomerErrorAttribute : AopBaseAttribute{
+    public class CustomerErrorAttribute : AopBaseAttribute
+    {
         public override void OnException(ExceptionContext exceptionContext)
         {
             exceptionContext.Result = "TestError";
