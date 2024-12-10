@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -12,12 +13,18 @@ namespace AwesomeProxy
         /// 取得代理實體
         /// </summary>
         /// <param name="para">建構子參數</param>
-        public static TInterface GetProxyInstance<TInterface,TObject>(object[] para = null)
-            where TObject : class,new()
-            where TInterface:class
+        public static TInterface GetProxyInstance<TInterface, TObject>(object[] para = null)
+            where TObject : class
+            where TInterface : class
         {
-            Type realObjectType = HasConstrcutorMetod(typeof(TObject),para);
-            var target = Activator.CreateInstance(realObjectType, para) as TInterface;
+            Type subjectType = HasConstrcutorMetod(typeof(TObject), para);
+            var target = Activator.CreateInstance(
+                                     subjectType,
+                                     BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public,
+                                     null,
+                                     para,
+                                     null) as TInterface;
+
             return GetProxyInstance(() => target);
         }
 
@@ -32,14 +39,19 @@ namespace AwesomeProxy
             where TInterface : class
         {
             HasConstrcutorMetod(subjectType, para);
-            TInterface obj = Activator.CreateInstance(subjectType, para) as TInterface;
+            TInterface obj = Activator.CreateInstance(
+                                    subjectType,
+                                    BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public,
+                                    null,
+                                    para,
+                                    null) as TInterface;
 
             if (obj == null)
             {
                 throw new ArgumentException($"傳入 subjectType 需繼承於{typeof(TInterface).Name}");
             }
 
-            return GetProxyInstance(()=> obj);
+            return GetProxyInstance(() => obj);
         }
 
         /// <summary>
@@ -59,17 +71,63 @@ namespace AwesomeProxy
             return DynamicProxy<TObject>.CreateProxy(realSubject);
         }
 
-        private static Type HasConstrcutorMetod(Type realObjectType, object[] para)
+        /// <summary>
+        /// 取得代理實體
+        /// </summary>
+        /// <param name="para">建構子參數</param>
+        public static TInterface GetProxyInstanceWithParams<TInterface, TObject>(params object[] para)
+            where TObject : class
+            where TInterface : class
+        {
+            Type subjectType = HasConstrcutorMetod(typeof(TObject), para);
+            var target = Activator.CreateInstance(
+                                    subjectType,
+                                    BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public,
+                                    null,
+                                    para,
+                                    null) as TInterface;
+
+            return GetProxyInstance(() => target);
+        }
+
+        /// <summary>
+        /// 取得代理實體
+        /// </summary>
+        /// <param name="para">建構子參數</param>
+        public static TInterface GetProxyInstanceWithParams<TInterface>(Type subjectType, params object[] para)
+            where TInterface : class
+        {
+            HasConstrcutorMetod(subjectType, para);
+            TInterface obj = Activator.CreateInstance(
+                                    subjectType,
+                                    BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public,
+                                    null,
+                                    para,
+                                    null) as TInterface;
+
+            if (obj == null)
+            {
+                throw new ArgumentException($"傳入 subjectType 需繼承於{typeof(TInterface).Name}");
+            }
+
+            return GetProxyInstance(() => obj);
+        }
+
+        private static Type HasConstrcutorMetod(Type subjectType, object[] para)
         {
             var parameterTypes = para?.Select(p => p?.GetType()).ToArray() ?? Type.EmptyTypes;
-            var constructor = realObjectType.GetConstructor(parameterTypes);
+            var constructor = subjectType.GetConstructor(
+                                    BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public,
+                                    binder: null,
+                                    types: parameterTypes,
+                                    modifiers: null);
 
             if (constructor == null)
             {
-                throw new MissingMethodException($"Type '{realObjectType.Name}' does not have a matching constructor.");
+                throw new MissingMethodException($"Type '{subjectType.Name}' does not have a matching constructor.");
             }
 
-            return realObjectType;
+            return subjectType;
         }
 
     }

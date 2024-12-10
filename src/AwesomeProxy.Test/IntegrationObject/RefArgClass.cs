@@ -1,4 +1,4 @@
-﻿namespace AwesomeProxy.Test
+﻿namespace AwesomeProxy.Test.IntegrationObject
 {
     public class RefArgClass : IRefArgClass
     {

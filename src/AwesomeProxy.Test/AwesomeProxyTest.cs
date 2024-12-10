@@ -2,6 +2,7 @@
 using Moq;
 using System;
 using System.Reflection;
+using AwesomeProxy.Test.IntegrationObject;
 
 namespace AwesomeProxy.Test
 {
@@ -124,6 +125,62 @@ namespace AwesomeProxy.Test
 
             Assert.AreEqual(true, _executing.TryGetFirstArg(out result));
             Assert.AreEqual(except, result);
+        }
+
+        [Test]
+        public void WithParameterClass_Type_PasswordMask()
+        {
+            //WithParameterClass withParameter = new WithParameterClass("hello world!", "AwesomeProxy is so good!");
+
+            var proxyInstance = ProxyFactory.GetProxyInstance<IWithParameterClass>(typeof(WithParameterClass),new object[] { "hello world!", "AwesomeProxy is so good!" });
+
+            var act = proxyInstance.RecordInfo("Enter the password: abc1234");
+
+            var expect = "hello world!\r\nAwesomeProxy is so good!\r\nEnter the password: *******\r\n";
+
+            Assert.AreEqual(expect, act);
+        }
+
+        [Test]
+        public void WithParameterClass_Generic_PasswordMask()
+        {
+            //WithParameterClass withParameter = new WithParameterClass("hello world!", "AwesomeProxy is so good!");
+
+            var proxyInstance = ProxyFactory.GetProxyInstance<IWithParameterClass, WithParameterClass>(new object[] { "hello world!", "AwesomeProxy is so good!" });
+
+            var act = proxyInstance.RecordInfo("Enter the password: abc1234");
+
+            var expect = "hello world!\r\nAwesomeProxy is so good!\r\nEnter the password: *******\r\n";
+
+            Assert.AreEqual(expect, act);
+        }
+
+        [Test]
+        public void WithParameterClass_GetProxyInstanceWithParams_Type_PasswordMask()
+        {
+            //WithParameterClass withParameter = new WithParameterClass("hello world!", "AwesomeProxy is so good!");
+
+            var proxyInstance = ProxyFactory.GetProxyInstanceWithParams<IWithParameterClass>(typeof(WithParameterClass), "hello world!", "AwesomeProxy is so good!");
+
+            var act = proxyInstance.RecordInfo("Enter the password: abc1234");
+
+            var expect = "hello world!\r\nAwesomeProxy is so good!\r\nEnter the password: *******\r\n";
+
+            Assert.AreEqual(expect, act);
+        }
+
+        [Test]
+        public void WithParameterClass_GetProxyInstanceWithParams_Generic_PasswordMask()
+        {
+            //WithParameterClass withParameter = new WithParameterClass("hello world!", "AwesomeProxy is so good!");
+
+            var proxyInstance = ProxyFactory.GetProxyInstanceWithParams<IWithParameterClass, WithParameterClass>("hello world!", "AwesomeProxy is so good!");
+
+            var act = proxyInstance.RecordInfo("Enter the password: abc1234");
+
+            var expect = "hello world!\r\nAwesomeProxy is so good!\r\nEnter the password: *******\r\n";
+
+            Assert.AreEqual(expect, act);
         }
     }
 }
