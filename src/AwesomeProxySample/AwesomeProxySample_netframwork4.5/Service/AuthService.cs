@@ -25,7 +25,7 @@ namespace AwesomeProxySample.Service
     /// </summary>
     public class WriteAbleAttribute : AopBaseAttribute
     {
-        public override void OnExcuting(ExcuteingContext context)
+        public override void OnExecuting(ExecutingContext context)
         {
             LoginInfo loginInfo = context.GetFirstArg<LoginInfo>();
 
