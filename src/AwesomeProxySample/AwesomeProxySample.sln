@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35431.28
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AwesomeProxySample", "AwesomeProxySample.csproj", "{25709F1A-15E2-425E-B01F-EE4D55466155}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AwesomeProxySample_net60", "AwesomeProxySample_net.6.0\AwesomeProxySample_net60.csproj", "{39893067-D996-40C2-9A67-E43FC46C09BD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AwesomeProxySample", "AwesomeProxySample_netframwork4.5\AwesomeProxySample.csproj", "{25709F1A-15E2-425E-B01F-EE4D55466155}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,6 +13,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{39893067-D996-40C2-9A67-E43FC46C09BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{39893067-D996-40C2-9A67-E43FC46C09BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{39893067-D996-40C2-9A67-E43FC46C09BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{39893067-D996-40C2-9A67-E43FC46C09BD}.Release|Any CPU.Build.0 = Release|Any CPU
 		{25709F1A-15E2-425E-B01F-EE4D55466155}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{25709F1A-15E2-425E-B01F-EE4D55466155}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{25709F1A-15E2-425E-B01F-EE4D55466155}.Release|Any CPU.ActiveCfg = Release|Any CPU

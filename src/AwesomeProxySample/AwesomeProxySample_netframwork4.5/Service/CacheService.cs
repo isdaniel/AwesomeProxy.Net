@@ -22,7 +22,7 @@ namespace AwesomeProxySample.Service
     {
         public string CacheName { get; set; }
 
-        public override void OnExcuting(ExcuteingContext context)
+        public override void OnExecuting(ExecutingContext context)
         {
             object cacheObj = CallContext.GetData(CacheName);
             if (cacheObj != null)
@@ -31,7 +31,7 @@ namespace AwesomeProxySample.Service
             }
         }
 
-        public override void OnExcuted(ExcutedContext context)
+        public override void OnExecuted(ExecutedContext context)
         {
             CallContext.SetData(CacheName, context.Result);
         }

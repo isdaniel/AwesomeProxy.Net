@@ -1,8 +1,8 @@
 ﻿using System;
-using Newtonsoft.Json;
 using AwesomeProxySample.Model;
 using AwesomeProxy.FilterAttribute;
 using AwesomeProxy;
+using Newtonsoft.Json;
 
 namespace AwesomeProxySample.Service
 {
@@ -31,12 +31,12 @@ namespace AwesomeProxySample.Service
     /// </summary>
     public class ConsoleLogAttribute : AopBaseAttribute
     {
-        public override void OnExcuted(ExcutedContext result)
+        public override void OnExecuted(ExecutedContext result)
         {
             Console.WriteLine(JsonConvert.SerializeObject(result.Args));
         }
 
-        public override void OnExcuting(ExcuteingContext args)
+        public override void OnExecuting(ExecutingContext args)
         {
             Console.WriteLine($"傳入參數:{JsonConvert.SerializeObject(args.Args)}");
         }
