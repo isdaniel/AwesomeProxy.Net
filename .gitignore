@@ -137,3 +137,5 @@ _NCrunch*
 /src/AwesomeProxy/*.nuspec
 /src/.vs
 /nuget/*.nupkg
+
+.codegpt
