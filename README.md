@@ -1,6 +1,8 @@
 [![AwesomeProxy.Net](https://img.shields.io/nuget/v/AwesomeProxy.Net.svg?style=plastic)](https://www.nuget.org/packages/AwesomeProxy.Net/)
 [![NuGet Downloads](https://img.shields.io/nuget/dt/AwesomeProxy.Net.svg)](https://www.nuget.org/packages/AwesomeProxy.Net/)
 [![Build status](https://ci.appveyor.com/api/projects/status/kgvtee5tgnxbaa4j/branch/master?svg=true)](https://ci.appveyor.com/project/isdaniel/awesomeproxy-net/branch/master)
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/isdaniel/AwesomeProxy.Net)
+
 -----
 
 ## Introduction to AOP (Aspect-Oriented Programming)
