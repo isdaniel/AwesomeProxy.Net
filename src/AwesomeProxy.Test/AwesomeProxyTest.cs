@@ -98,13 +98,13 @@ namespace AwesomeProxy.Test
         {
             string except = "DefaultException";
 
-            TargetInvocationException ex = Assert.Throws<TargetInvocationException>(() =>
+            Exception ex = Assert.Throws<Exception>(() =>
             {
                 ProxyFactory.GetProxyInstance<IExceptionClass>(() => new ExceptionClass())
                 .NormalException(except);
             });
 
-            Assert.That(ex.InnerException.Message, Is.EqualTo(except));
+            Assert.That(ex.Message, Is.EqualTo(except));
         }
 
         [Test]

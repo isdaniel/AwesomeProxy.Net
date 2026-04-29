@@ -153,7 +153,3 @@ Console.WriteLine(cache.GetCacheDate());
 
 ![https://ithelp.ithome.com.tw/upload/images/20180209/20096630BB4lN2NYOW.png](https://ithelp.ithome.com.tw/upload/images/20180209/20096630BB4lN2NYOW.png)
 
-Unit Test Results
-
-![https://ithelp.ithome.com.tw/upload/images/20180209/20096630tbgj7MbcAL.png](https://ithelp.ithome.com.tw/upload/images/20180209/20096630tbgj7MbcAL.png)
-

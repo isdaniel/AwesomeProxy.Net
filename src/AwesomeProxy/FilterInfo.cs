@@ -1,38 +1,22 @@
-﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 
 namespace AwesomeProxy
 {
-    /// <summary>
-    /// Filtering Current Registered Point
-    /// 1.on Class
-    /// 2.on Method
-    /// </summary>
     public class FilterInfo
     {
-        private readonly List<IExcuteFilter> _executeFilters = new List<IExcuteFilter>();
-        private readonly List<IExceptionFilter> _exceptionFilters = new List<IExceptionFilter>();
+        private readonly CachedFilterInfo _cached;
 
         public FilterInfo(object target, MethodInfo method)
         {
-            //search for class Attribute
-            var classAttr = target.GetType().GetCustomAttributes(typeof(Attribute), true);
-            //search for method Attribute
-            var methodAttr = Attribute.GetCustomAttributes(method, typeof(Attribute), true);
-
-            var unionAttr = classAttr.Union(methodAttr);
-
-            _executeFilters.AddRange(unionAttr.OfType<IExcuteFilter>());
-            _exceptionFilters.AddRange(unionAttr.OfType<IExceptionFilter>());
+            _cached = FilterCache.GetOrAdd(target.GetType(), method);
         }
 
         public IList<IExcuteFilter> ExecuteFilters
         {
             get
             {
-                return _executeFilters;
+                return new List<IExcuteFilter>(_cached.ExecuteFilters);
             }
         }
 
@@ -40,7 +24,7 @@ namespace AwesomeProxy
         {
             get
             {
-                return _exceptionFilters;
+                return new List<IExceptionFilter>(_cached.ExceptionFilters);
             }
         }
     }

@@ -1,28 +1,17 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Runtime.ExceptionServices;
 
 namespace AwesomeProxy
 {
-    /// <summary>
-    /// AOP Proxy Class
-    /// </summary>
-    /// <typeparam name="TObject"></typeparam>
     public class DynamicProxy<TObject> : DispatchProxy
     {
         private TObject _target;
-        private MethodInfo _targetMethod;
-        private object[] _args;
 
-        /// <summary>
-        /// 執行Exception過濾器
-        /// </summary>
-        /// <param name="exceptionFilter"></param>
-        /// <param name="ex"></param>
-        /// <returns></returns>
-        private ExceptionContext OnException(IList<IExceptionFilter> exceptionFilter, Exception ex)
+        private ExceptionContext OnException(IReadOnlyList<IExceptionFilter> exceptionFilter, MethodInfo targetMethod, object[] args, Exception ex)
         {
-            ExceptionContext exceptionContext = new ExceptionContext(_targetMethod,_args)
+            ExceptionContext exceptionContext = new ExceptionContext(targetMethod, args)
             {
                 Exception = ex
             };
@@ -45,15 +34,14 @@ namespace AwesomeProxy
             }
 
             object proxy = Create<TObject, DynamicProxy<TObject>>();
-            ((DynamicProxy<TObject>) proxy)._target = creator();
+            ((DynamicProxy<TObject>)proxy)._target = creator();
 
             return (TObject)proxy;
         }
 
-
-        private void Executed(IList<IExcuteFilter> filters, object returnValue)
+        private void Executed(IReadOnlyList<IExcuteFilter> filters, MethodInfo targetMethod, object[] args, object returnValue)
         {
-            ExecutedContext executeContext = new ExecutedContext(_targetMethod, _args, returnValue);
+            ExecutedContext executeContext = new ExecutedContext(targetMethod, args, returnValue);
 
             foreach (var filter in filters)
             {
@@ -63,10 +51,9 @@ namespace AwesomeProxy
             }
         }
 
-        private ExecutingContext Executing(IList<IExcuteFilter> filters)
+        private ExecutingContext Executing(IReadOnlyList<IExcuteFilter> filters, MethodInfo targetMethod, object[] args)
         {
-            //封裝執行前上下文
-            ExecutingContext execute = new ExecutingContext(_targetMethod, _args);
+            ExecutingContext execute = new ExecutingContext(targetMethod, args);
 
             foreach (var filter in filters)
             {
@@ -80,34 +67,44 @@ namespace AwesomeProxy
 
         protected override object Invoke(MethodInfo targetMethod, object[] args)
         {
-            FilterInfo filterInfo = new FilterInfo(_target, targetMethod);
-            _targetMethod = targetMethod;
-            _args = args;
+            var cached = FilterCache.GetOrAdd(_target.GetType(), targetMethod);
             object result;
             try
             {
-                ExecutingContext executing = Executing(filterInfo.ExecuteFilters);
+                ExecutingContext executing = Executing(cached.ExecuteFilters, targetMethod, args);
 
                 if (executing.Result != null)
                 {
                     return executing.Result;
                 }
 
-                result = targetMethod.Invoke(_target, args);
+                var invoker = MethodInvokerCache.GetOrCreate(targetMethod);
+                result = invoker(_target, args);
 
-                //Execute Executed Filters
-                Executed(filterInfo.ExecuteFilters, result);
+                Executed(cached.ExecuteFilters, targetMethod, args, result);
             }
-            catch (Exception ex)
+            catch (TargetInvocationException tie)
             {
-                ExceptionContext exception = OnException(filterInfo.ExceptionFilters, ex);
-                //Is There any Customer error Result
+                var realEx = tie.InnerException ?? tie;
+                ExceptionContext exception = OnException(cached.ExceptionFilters, targetMethod, args, realEx);
                 if (exception.Result != null)
                 {
                     return exception.Result;
                 }
 
-                throw ex;
+                ExceptionDispatchInfo.Capture(realEx).Throw();
+                return null;
+            }
+            catch (Exception ex)
+            {
+                ExceptionContext exception = OnException(cached.ExceptionFilters, targetMethod, args, ex);
+                if (exception.Result != null)
+                {
+                    return exception.Result;
+                }
+
+                ExceptionDispatchInfo.Capture(ex).Throw();
+                return null;
             }
             return result;
         }

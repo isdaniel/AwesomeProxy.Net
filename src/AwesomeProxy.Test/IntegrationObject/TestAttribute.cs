@@ -34,7 +34,7 @@ namespace AwesomeProxy.Test.IntegrationObject
     {
         public override void OnException(ExceptionContext exceptionContext)
         {
-            exceptionContext.Result = exceptionContext.Exception.InnerException.Message;
+            exceptionContext.Result = exceptionContext.Exception.Message;
         }
     }
 

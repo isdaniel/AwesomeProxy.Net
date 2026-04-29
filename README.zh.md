@@ -152,10 +152,6 @@ Simple Code：
 
 ![https://ithelp.ithome.com.tw/upload/images/20180209/20096630BB4lN2NYOW.png](https://ithelp.ithome.com.tw/upload/images/20180209/20096630BB4lN2NYOW.png)
 
-**Unit Test 結果**
-
-![https://ithelp.ithome.com.tw/upload/images/20180209/20096630tbgj7MbcAL.png](https://ithelp.ithome.com.tw/upload/images/20180209/20096630tbgj7MbcAL.png)
-
 
 **2018-11-26 發布至Nuget上**
 
